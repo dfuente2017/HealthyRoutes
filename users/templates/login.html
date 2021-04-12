@@ -11,8 +11,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 		
-		<link rel="stylesheet" href="styles.css">
-		<script src="script.js"></script>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'styles.css' %}">
+		<script src="{% static 'script.js' %}"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -23,11 +24,15 @@
 					<a id="register-tab" href="#" class="col-sm-6 text-center pestañas-login-2 non-active" onclick="changeTab(1);"> Registrarse</a>
 				</div>
 				<div="row">
-					<form id="login">
-						<input id="usr" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
-						<input id="pwd"type="password" class="form-control w-75 mx-auto mt-5" placeholder="Contraseña">
+					<form id="login" action="/login/" method="POST">
+						{% csrf_token %}
+						<input id="logregis" name = "logregis" type = "hidden" value = "login">
+						<input id="usr" name = "usr" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Nombre de usuario">
+						<!--<input id="email" name = "email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">-->
+						<input id="pwd" name="pwd" type="password" class="form-control w-75 mx-auto mt-5" placeholder="Contraseña">
+						<button id="submit-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3">Iniciar Sesión</button>
 					</form>
-					<button id="submit-button" type="button" class="form-button float-right mt-5 mb-3">Iniciar Sesión</button>
+					
 					<!--btn btn-primary float-right mt-5 mb-3-->
 				</div>
 			</div>
