@@ -4,18 +4,16 @@ function changeTab(n){
 		document.getElementById("register-tab").attributes[2].value = "col-sm-6 text-center pestañas-login-2 non-active";
 		if(document.getElementById("pwd2") != null){
 			document.getElementById("pwd2").remove();
-			document.getElementById("email").remove();
+			document.getElementById("nick").remove();
 			document.getElementById("submit-button").textContent = "Iniciar Sesión";
-			document.getElementById("logregis").value = "login";
 		}
 	}else{
 		if(document.getElementById("pwd2") == null){
 			document.getElementById("login-tab").attributes[2].value = "col-sm-6 text-center pestañas-login-1 non-active";
 			document.getElementById("register-tab").attributes[2].value = "col-sm-6 text-center pestañas-login-2";
 			addPwd2();
-			addEmail();
+			addNick();
 			document.getElementById("submit-button").textContent = "Registrarse";
-			document.getElementById("logregis").value = "register";
 		}
 	}
 }
@@ -23,21 +21,21 @@ function changeTab(n){
 function addPwd2(){
 	var pwd2 = document.createElement("INPUT");
 	pwd2.setAttribute("id", "pwd2");
-	pwd2.setAttribute("name", "pwd2");
+	pwd2.setAttribute("name", "pwd2")
 	pwd2.setAttribute("type", "password");
 	pwd2.setAttribute("class", "form-control w-75 mx-auto mt-5");
 	pwd2.setAttribute("placeholder", "Repita contraseña");
 	document.getElementById("login").appendChild(pwd2);
 }
 
-function addEmail(){
-	var email = document.createElement("INPUT");
-	email.setAttribute("id","email");
-	email.setAttribute("name","email")
-	email.setAttribute("type", "text");
-	email.setAttribute("class", "form-control w-75 mx-auto mt-5");
-	email.setAttribute("placeholder", "Email");
-	document.getElementById("login").appendChild(email);
+function addNick(){
+	var nick = document.createElement("INPUT");
+	nick.setAttribute("id","nick");
+	nick.setAttribute("name","nick")
+	nick.setAttribute("type", "text");
+	nick.setAttribute("class", "form-control w-75 mx-auto mt-5");
+	nick.setAttribute("placeholder", "Nick");
+	document.getElementById("login").appendChild(nick);
 }
 
 function changeNick(){

@@ -27,8 +27,7 @@
 					<form id="login" action="/login/" method="POST">
 						{% csrf_token %}
 						<input id="logregis" name = "logregis" type = "hidden" value = "login">
-						<input id="usr" name = "usr" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Nombre de usuario">
-						<!--<input id="email" name = "email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">-->
+						<input id="email" name = "email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
 						<input id="pwd" name="pwd" type="password" class="form-control w-75 mx-auto mt-5" placeholder="Contraseña">
 						<button id="submit-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3">Iniciar Sesión</button>
 					</form>
