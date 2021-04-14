@@ -29,3 +29,6 @@ def logout(request):
     auth.logout(request)
     #return redirect("/")
     return redirect("/admin/")
+
+def profile(request):
+    return render(request, "profile.html")

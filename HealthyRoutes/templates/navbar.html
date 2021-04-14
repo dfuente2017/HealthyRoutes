@@ -1,0 +1,18 @@
+{% load static %}
+<nav>
+    <ul>
+        <a href="#"><img class="navbar-img" src="{% static 'img/logo.jpg' %}" width="5%" align="middle"/></a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-right" href="#" id="navbardrop" data-toggle="dropdown">
+                User1234
+                <img src = "{% static 'img/user.png' %}" width="10%"></img>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Mi perfil</a>
+                <a class="dropdown-item" href="#">Rutas favoritas</a>
+                <a class="dropdown-item" href="#">Rutas completadas</a>
+                <a class="dropdown-item" href="#">Cerrar sesión</a>
+            </div>
+        </li>
+    </ul>
+</nav>
