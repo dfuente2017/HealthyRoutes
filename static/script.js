@@ -44,12 +44,9 @@ function changeNick(){
 }
 
 function changePassword(){
-	disableSubmit();
 	document.getElementById("change-password").remove();
 	document.getElementById("user-password1").hidden = false;
-	document.getElementById("user-password1").required = true;
 	document.getElementById("user-password2").hidden = false;
-	document.getElementById("user-password2").required = true;
 }
 
 function moreInfo(){
@@ -72,37 +69,27 @@ function like(){
 	}
 }
 
-function disableSubmit(){
-	document.getElementById("save-changes").disabled = true;
-
-}
-
 function checkPassword(){
-	var pwd1 = document.getElementById("user-password1").value;
-	var pwd2 = document.getElementById("user-password2").value;
-
-	var msg1 = document.getElementById("pass-dis");
-	var msg2 = document.getElementById("pass-range");
-	var msg3 = document.getElementById("pass-length");
-
-	msg1.hidden = true;
-	msg2.hidden = true;
-	msg3.hidden = true;
+	var pwd1 = document.getElementById("pwd1");
+	var pwd2 = document.getElementById("pwd2");
 
 	if(pwd1 != pwd2){
-		msg1.hidden = false;
-		disableSubmit();
 		return false;
 	}
-	if(pwd1.length<10){
-		msg2.hidden = false;
-		disableSubmit();
+	if(pwd1 == ""){
 		return false;
 	}
-	if(!pwd1.match(/[A-Z]/g) || !pwd1.match(/[a-z]/g) || !pwd1.match(/[0-9]/g)){
-		msg2.hidden = false;
-		disableSubmit();
+	if(pwd1.length<15){
 		return false;
+	}
+	if(!pwd1.match(/[A-Z]/g)){
+		return false;
+	}
+	if(!pwd1.match(/[a-z]/g)){
+		return false
+	}
+	if(!pwd1.match(/[0-9]/g)){
+		return false
 	}
 
 	return true;
@@ -110,11 +97,8 @@ function checkPassword(){
 
 function checkForm(){
 	if(checkPassword()){
-		document.getElementById("save-changes").disabled = false;
+		document.getElementById("profile-form").submit()
+	}else{
+		console.log("Contraseña no valida");
 	}
-}
-
-function deleteImage(){
-	document.getElementById("delete-img").value="true";
-	document.getElementById("profile-img").src = "/static/img/user.png";
 }

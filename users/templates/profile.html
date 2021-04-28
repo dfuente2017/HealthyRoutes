@@ -1,6 +1,73 @@
 {% extends "main.html" %}
 
-{% block title %}Mi perfil{% endblock %}
-
-
-<h1>profile</h1>
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row h-50 w-100 text-center">
+        <div class="card bg-primary text-white col-sm-8 mt-5 mx-auto">
+            <form id="profile-form" method ="POST" enctype="multipart/form-data">
+                {% csrf_token %} 
+                <div class="row mt-5">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-4">
+                        {% if user.user_img != "" %}
+                        <div class="row">
+                            <a href="#" onclick="deleteImage();" style="position: relative; left: 80%;" class="glyphicon glyphicon-remove"></a>
+                            <input id="delete-img" name="delete-img" value="false" hidden></input>
+                        </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="text-center">
+                                {% if user.user_img == "" %}
+                                    <img id="profile-img" src="{% static 'img/user.png' %}" class="img-circle " width="50%"/>
+                                {% else %}
+                                    <img id="profile-img" src="{{ user.user_img.url }}" class="img-circle " width="50%"/>
+                                {% endif %}
+                                <input type="file" name="user_img" class="glyphicon glyphicon-edit"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-sm-12 text-center">
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <div class="w-75 mx-auto d-flex">
+                            <input id="user-nick" name="nick" type="text" class="form-control w-75" value="{{ user.nick }}" disabled></input>
+                            <button id="change-nick" type="button" class="form-button mx-auto" onclick="changeNick();">Cambiar nick</button>
+                        </div>
+                        <div>
+                            {% if message %}
+                                <p style="color:red;">{{ message }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5 mb-5">
+                    <div class="col-sm-12">
+                        <input id="user-password1" name="pwd1" type="password" class="form-control w-75 mx-auto" placeholder="Nueva contraseña" hidden onchange="checkForm();">
+                        <input id="user-password2" name="pwd2" type="password" class="form-control w-75 mx-auto mt-4 mb-4" placeholder="Repita la contraseña" hidden onchange="checkForm();">
+                        <p id="pass-dis" hidden style="color:red;">Las contraseñas no coinciden.</p>
+                        <p id="pass-range" hidden style="color:red;">La contraseña debe contener una mayuscula, una minuscula y un número.</p>
+                        <p id="pass-length" hidden style="color:red;">La contraseña debe tener una longitud de al menos 10 caracteres.</p>
+                    </div>
+                </div>
+                <div class="row h-15">
+                    <div id="password-field" class="col-sm-12 text-center">
+                        <button id="change-password" type="button" class="form-button mt-3" onclick="changePassword();">Cambiar contraseña</button>
+                    </div>
+                </div>
+                <div class="row mb-3 mt-5">
+                    <div class="col-sm-12 text-right">
+                        <button id="save-changes" class="form-button mx-auto">Guardar cambios</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
