@@ -3,32 +3,51 @@ from django.http import HttpResponse
 from django.contrib.auth.models import auth
 from .models import User
 
-from django.core.files.storage import default_storage
+import re
 
 # Create your views here.
 
 def login(request):
+    auth.logout(request)
     if request.method == 'POST':
-        if ('pwd2' in request.POST):
-            user = User.objects.create_user(email = request.POST['email'], password = request.POST['pwd'], nick = request.POST['nick'])
-            user.save()
-            return redirect("/login/")
+        user = auth.authenticate(email = request.POST['email'], password = request.POST['pwd'])
+        if user is not None:
+            auth.login(request,user)
+            #return redirect("/")
+            return redirect("/admin/")
         else:
-            user = auth.authenticate(email = request.POST['email'], password = request.POST['pwd'])    #hacerlo con email
-            if user is not None:
-                auth.login(request,user)
-                #return redirect("/")
-                return redirect("/admin/")
-            else:
-                return render(request, "login.html")
+            return render(request, "login.html",{"message":"Usuario y/o contraseña incorrecto."})
     else:
         return render(request, "login.html")
+
+
+def register(request):
+    auth.logout(request)
+    parameters = dict()
+    if request.method == 'POST':
+        if not checkPassword(request.POST['pwd1'], request.POST['pwd2']):
+            parameters['message_nick'] = ('Ese nick ya está en uso.')
+        if not len(User.objects.filter(email=request.POST['email'])) == 0:
+            parameters['message_email'] = ('Ese email ya está en uso.')
+        if not len(User.objects.filter(nick=request.POST['nick'])) == 0:
+            parameters['message_nick'] = ('Ese nick ya está en uso.')
+
+        if len(parameters) == 0:
+            user = User.objects.create_user(email = request.POST['email'], password = request.POST['pwd1'], nick = request.POST['nick'])
+            user.save()
+            auth.login(request,user)
+            #return redirect("/")
+            return redirect("/admin/")
+        else:
+            return render(request, "register.html", parameters)
+    else:
+        return render(request, "register.html")
 
 
 def logout(request):
     auth.logout(request)
     #return redirect("/")
-    return redirect("/admin/")
+    return redirect("/login/")
 
 
 def profile(request):
@@ -49,13 +68,19 @@ def profile(request):
                 image.name = user.nick + image.name[image.name.find('.'):len(image.name)]
                 user.user_img = image
 
-            aux = User.objects.filter(nick="admin")
-            print(len(aux))
+            print("Flag")
+            if 'pwd1' in request.POST and len(request.POST['pwd1'])!= 0:
+                print(checkPassword(request.POST['pwd1'],request.POST['pwd2']))
+                if checkPassword(request.POST['pwd1'], request.POST['pwd2']):
+                    user.set_password(request.POST['pwd1'])
+                else:
+                    parameters['message_pwd'] = ('La contraseña no cumple los requisitos.')
+
             if 'nick' in request.POST:
                 if len(User.objects.filter(nick=request.POST['nick'])) == 0:
                     user.nick = request.POST['nick']
                 else:
-                    parameters['message'] = ('El nick "%s" no está disponible.' % request.POST['nick'])
+                    parameters['message_nick'] = ('El nick "%s" no está disponible.' % request.POST['nick'])
 
             user.save()
             return render(request, "profile.html", parameters)
@@ -65,6 +90,15 @@ def profile(request):
         return render(request, "login.html")  
 
 
+
+
+
+
+
+
 class WrongPassword(Exception):
     def __message__(self):
         return "The two password are diferent."
+
+def checkPassword(pwd1 = str(), pwd2 = str()):
+    return ((pwd1 == pwd2) and (len(pwd1) > 10) and (re.search("[a-z]", pwd1)) and (re.search("[A-Z]", pwd1)) and (re.search("[0-9]", pwd1)))

@@ -17,25 +17,32 @@
 	</head>
 	<body>
 		<div class="container">
-		<div class="row">
-			<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
-				<div class="row h-15">
-					<a id="login-tab" href="#" class="col-sm-6 text-center pestañas-login-1" onclick="changeTab(0);"> Iniciar Sesión</a>
-					<a id="register-tab" href="#" class="col-sm-6 text-center pestañas-login-2 non-active" onclick="changeTab(1);"> Registrarse</a>
-				</div>
-				<div="row">
-					<form id="login" action="/login/" method="POST">
-						{% csrf_token %}
-						<input id="logregis" name = "logregis" type = "hidden" value = "login">
-						<input id="email" name = "email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
-						<input id="pwd" name="pwd" type="password" class="form-control w-75 mx-auto mt-5" placeholder="Contraseña">
-						<button id="submit-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3">Iniciar Sesión</button>
-					</form>
-					
-					<!--btn btn-primary float-right mt-5 mb-3-->
+			<div class="row">
+				<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
+					<div class="row h-15">
+						<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1"> Iniciar Sesión</a>
+						<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2 non-active"> Registrarse</a>
+					</div>
+					<div="row">
+						<form id="login" action="/login/" method="POST">
+							{% csrf_token %}
+							<input id="email" name = "email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
+							<div class="input-group w-75 mx-auto mt-5">
+								<input id="pwd" name="pwd" type="password" class="form-control" placeholder="Contraseña">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd');">Mostrar contraseña</button>
+								</div>
+							</div>
+							{% if message %}
+								<div class="text-center mt-3">
+									<p style="color:red">{{message}}</p>
+								</div>
+							{% endif%}
+							<button id="submit-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3">Iniciar Sesión</button>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
 		</div>
 	</body>
 </html>

@@ -41,16 +41,29 @@
                             <button id="change-nick" type="button" class="form-button mx-auto" onclick="changeNick();">Cambiar nick</button>
                         </div>
                         <div>
-                            {% if message %}
-                                <p style="color:red;">{{ message }}</p>
+                            {% if message_nick %}
+                                <p style="color:red;">{{ message_nick }}</p>
+                            {% endif %}
+                            {% if message_pwd %}
+                                <p style="color:red;">{{ message_pwd }}</p>
                             {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="row mt-5 mb-5">
                     <div class="col-sm-12">
-                        <input id="user-password1" name="pwd1" type="password" class="form-control w-75 mx-auto" placeholder="Nueva contraseña" hidden onchange="checkForm();">
-                        <input id="user-password2" name="pwd2" type="password" class="form-control w-75 mx-auto mt-4 mb-4" placeholder="Repita la contraseña" hidden onchange="checkForm();">
+                        <div class="input-group w-75 mx-auto mt-5">
+                            <input id="pwd1" name="pwd1" type="password" class="form-control" placeholder="Nueva contraseña" hidden onchange="checkForm('save-changes');">
+                            <div class="input-group-append">
+                                <button id="pwd1-show" class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd1');" hidden>Mostrar contraseña</button>
+                            </div>
+                        </div>
+                        <div class="input-group w-75 mx-auto mt-5">
+                            <input id="pwd2" name="pwd2" type="password" class="form-control" placeholder="Repita la contraseña" hidden onchange="checkForm('save-changes');">
+                            <div class="input-group-append">
+                                <button id="pwd2-show" class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd2');" hidden>Mostrar contraseña</button>
+                            </div>
+                        </div>
                         <p id="pass-dis" hidden style="color:red;">Las contraseñas no coinciden.</p>
                         <p id="pass-range" hidden style="color:red;">La contraseña debe contener una mayuscula, una minuscula y un número.</p>
                         <p id="pass-length" hidden style="color:red;">La contraseña debe tener una longitud de al menos 10 caracteres.</p>
@@ -58,7 +71,7 @@
                 </div>
                 <div class="row h-15">
                     <div id="password-field" class="col-sm-12 text-center">
-                        <button id="change-password" type="button" class="form-button mt-3" onclick="changePassword();">Cambiar contraseña</button>
+                        <button id="change-password" type="button" class="form-button mt-3" onclick="disableSubmit('save-changes');changePassword();">Cambiar contraseña</button>
                     </div>
                 </div>
                 <div class="row mb-3 mt-5">

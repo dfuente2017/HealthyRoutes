@@ -18,11 +18,12 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from users.views import login, logout, profile
+from users.views import login, register, logout, profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login),
+    path('register/',register),
     path('logout/', logout),
     path('profile/', profile),
 ]
