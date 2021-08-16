@@ -60,6 +60,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR,'HealthyRoutes/templates/'),
             os.path.join(BASE_DIR,'users/templates/'),
+            os.path.join(BASE_DIR,'routes/templates/'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from users.views import login, register, logout, profile
+from routes.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('register/',register),
     path('logout/', logout),
     path('profile/', profile),
+    path('', index)
 ]
 
 if settings.DEBUG:
