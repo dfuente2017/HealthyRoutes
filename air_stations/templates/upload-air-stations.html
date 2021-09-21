@@ -1,0 +1,46 @@
+<html>
+	<head>	
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'styles.css' %}">
+		<script src="{% static 'script.js' %}"></script>
+        <script src="{% static 'ajax.js' %}"></script>
+	</head>
+	<body>
+        <div>
+            <form method="POST" action="/upload-air-stations">
+            {% csrf_token %}
+                <h2>Elije país:</h2>
+                <select name = "country" id = "country">
+                    <option value = "-1" selected>Seleccione un pais</option>
+                    {% for country in countries %}
+                        <option value = "{{country.id}}">{{country.name}}</option>
+                    {% endfor %}
+                </select>
+                <h2 style="align-content: center;">Elije provincia:</h2>
+                <select name = "province" id = "province">
+                    <option value = "-1" selected>Seleccione una provincia</option>
+                    {% for province in provinces %}
+                        <option value = "{{province.id}}">{{province.name}}</option>
+                    {% endfor %}
+                </select>
+                <h2 style="align-content: center;">Elije ciudad:</h2>
+                <select name = "town" id = "town">
+                    <option value = "-1" selected>Seleccione una ciudad</option>
+                </select>
+                <input type="file" id="town-stations-excel"></input>
+                <button id="submit-selected-town" type="submit" disabled>Subir estaciones</button>
+            </form>
+        </div>
+    </body>
+</html>
