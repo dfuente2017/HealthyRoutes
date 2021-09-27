@@ -18,7 +18,7 @@
 	</head>
 	<body>
         <div>
-            <form method="POST" action="/upload-air-stations">
+            <form method="POST" action="/upload-air-stations" enctype="multipart/form-data">
             {% csrf_token %}
                 <h2>Elije país:</h2>
                 <select name = "country" id = "country">
@@ -38,7 +38,7 @@
                 <select name = "town" id = "town">
                     <option value = "-1" selected>Seleccione una ciudad</option>
                 </select>
-                <input type="file" id="town-stations-excel"></input>
+                <input type="file" name = "town-stations-excel" id= "town-stations-excel"></input>
                 <button id="submit-selected-town" type="submit" disabled>Subir estaciones</button>
             </form>
         </div>

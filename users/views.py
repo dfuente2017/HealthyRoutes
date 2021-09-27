@@ -68,7 +68,6 @@ def profile(request):
                 image.name = user.nick + image.name[image.name.find('.'):len(image.name)]
                 user.user_img = image
 
-            print("Flag")
             if 'pwd1' in request.POST and len(request.POST['pwd1'])!= 0:
                 print(checkPassword(request.POST['pwd1'],request.POST['pwd2']))
                 if checkPassword(request.POST['pwd1'], request.POST['pwd2']):

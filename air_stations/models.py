@@ -38,3 +38,11 @@ class Province(models.Model):
 class Country(models.Model):
     id = models.IntegerField(primary_key = True)
     name = models.CharField(max_length = 30)
+
+class Arguments(models.Model):
+    id = models.IntegerField(primary_key = True)
+    argument = models.CharField(max_length = 30, null = True)
+
+class FactoryReadCsvArguments(models.Model):
+    town_id = models.IntegerField(primary_key = True)
+    arguments = models.ArrayField(model_container = Arguments)

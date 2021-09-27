@@ -2,14 +2,21 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from .models import Country, Province, Town
 from django.http import JsonResponse
+#from air_stations.services.CsvReader import readCsv
+from air_stations.services.FactoryReadCsv import FactoryReadCsv
 
 # Create your views here.
 
 def upload_air_stations(request):
     if request.user.is_authenticated and request.user.is_superuser:
         if request.method == 'POST':
-            town = request.POST.get('town',-1)
+            town = int(request.POST.get('town', None))
+            airStationFile = request.FILES.get('town-stations-excel', None)
             
+            frc = FactoryReadCsv(town)
+            csv_reader = frc.provide_csv_reader_class()
+            csv_reader.readCsv(file = airStationFile, town = town)
+
             return redirect("/upload-air-stations") # Enviar paises
             #return render(request, "upload-air-stations.html")
         else:
