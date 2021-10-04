@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from .models import Country, Province, Town
 from django.http import JsonResponse
-#from air_stations.services.CsvReader import readCsv
 from air_stations.services.FactoryReadCsv import FactoryReadCsv
 
 # Create your views here.
@@ -15,7 +14,7 @@ def upload_air_stations(request):
             
             frc = FactoryReadCsv(town)
             csv_reader = frc.provide_csv_reader_class()
-            csv_reader.readCsv(file = airStationFile, town = town)
+            csv_reader.read_csv(file = airStationFile, town = town)
 
             return redirect("/upload-air-stations") # Enviar paises
             #return render(request, "upload-air-stations.html")

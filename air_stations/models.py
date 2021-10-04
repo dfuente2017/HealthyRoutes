@@ -46,3 +46,7 @@ class Arguments(models.Model):
 class FactoryReadCsvArguments(models.Model):
     town_id = models.IntegerField(primary_key = True)
     arguments = models.ArrayField(model_container = Arguments)
+
+class FactoryReadMessuresTime(models.Model):
+    town_id = models.IntegerField(primary_key = True)
+    minutes_for_update = models.IntegerField(null = False)

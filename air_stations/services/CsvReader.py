@@ -1,26 +1,21 @@
 import pandas as pd
 from ..models import AirStation, Town
 
-
-def get_class(town_id = int()):
-    pass
-    #return dict({79:})
-
 class CsvReaderInterface():
     def __init__(self, args):
         self.args = list()
         for arg in args:
             self.args.append(arg)
 
-    def readCsv(self):
+    def read_csv(self):
         pass
 
 
-class CsvReader1(CsvReaderInterface):   #args -> [0]:ids_key, [1]: names_key, [2]: long_key, [3]: lat_key
+class CsvReader1(CsvReaderInterface):   #args -> [0]:ids_key, [1]: names_key, [2]: long_key, [3]: lat_key   used in: Madrid
     def __init__(self, args):
         super().__init__(args)           
 
-    def readCsv(self, file, town):
+    def read_csv(self, file, town):
         datos = pd.read_csv(file, header = 0, sep=";")
 
         ids = datos[self.args[0]]
