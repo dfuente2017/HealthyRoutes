@@ -21,11 +21,14 @@ class AirStation(models.Model):
     longitude = models.DecimalField(blank = False, max_digits=20, decimal_places=18)
     messures = models.EmbeddedField(model_container = Messures)
 
+
+"""It is important to assing last_modified a date with datetime format, and previous or equal to the actual time."""
 class Town(models.Model):
     id = models.IntegerField(primary_key = True)
     name = models.CharField(max_length = 30, null = True)
     air_stations = models.ArrayField(model_container = AirStation)
     url = models.URLField()
+    last_modified = models.DateTimeField(auto_now_add=True, null = True)
     province = models.IntegerField(null = True)
     #province = models.ForeignKey(Province, on_delete=models.CASCADE)
 
@@ -46,7 +49,3 @@ class Arguments(models.Model):
 class FactoryReadCsvArguments(models.Model):
     town_id = models.IntegerField(primary_key = True)
     arguments = models.ArrayField(model_container = Arguments)
-
-class FactoryReadMessuresTime(models.Model):
-    town_id = models.IntegerField(primary_key = True)
-    minutes_for_update = models.IntegerField(null = False)

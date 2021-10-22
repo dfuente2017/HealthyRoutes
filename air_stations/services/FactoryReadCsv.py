@@ -1,4 +1,4 @@
-import HealthyRputes.air_stations.services.CsvReader as CsvReader
+import air_stations.services.CsvReader as CsvReader
 from ..models import FactoryReadCsvArguments
 
 class FactoryReadCsv():
