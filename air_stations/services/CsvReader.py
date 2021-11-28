@@ -11,7 +11,7 @@ class CsvReaderInterface():
         pass
 
 
-class CsvReader1(CsvReaderInterface):   #args -> [0]:ids_key, [1]: names_key, [2]: long_key, [3]: lat_key   used in: Madrid
+class CsvReader1(CsvReaderInterface):   #args -> [0]:ids_key, [1]: names_key, [2]: long_key, [3]: lat_key   used in: Madrid(79)
     def __init__(self, args):
         super().__init__(args)           
 

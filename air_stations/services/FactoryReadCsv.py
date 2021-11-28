@@ -1,5 +1,5 @@
 import air_stations.services.CsvReader as CsvReader
-from ..models import FactoryReadCsvArguments
+from ..models import Arguments
 
 class FactoryReadCsv():
     def __init__(self, town_id = int()):
@@ -7,7 +7,7 @@ class FactoryReadCsv():
         self.provider = dict({79:CsvReader.CsvReader1,})
 
     def provide_csv_reader_class(self):
-        frca = FactoryReadCsvArguments.objects.get(town_id = self.town_id)
+        frca = Arguments.objects.get(town_id = self.town_id, argument_type = 'ASD')
         arguments = list()
 
         for arg in frca.arguments:
