@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from ..models import Messures, AirStation
+from ..models import Messures, AirStation, Town
 
 
 class MessuresReaderInterface():
@@ -12,7 +12,7 @@ class MessuresReaderInterface():
     def read_messures(self):
         pass
 
-class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: town, [2]: air_station, [3]: messure, [4]:hour, [5]:verified   used in: Madrid(79)
+class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: town, [2]: air_station, [3]: messure, [4]:hour, [5]:verified, [6]:town_id   used in: Madrid(79)
     def __init__(self, args):
         super().__init__(args)
 
@@ -20,24 +20,25 @@ class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: tow
     def read_messures(self):
         verified_list = ["v01","v02","v03","v04","v05","v06","v07","v08","v09","v10","v11","v12","v13","v14","v15","v16","v17","v18","v19","v20","v21","v22","v23","v24"]
         air_stations = dict()
-        url = 'https://www.mambiente.madrid.es/opendata/horario.xml' # define XML location
+        url = Town.objects.get(id = self.args[6]).url
+        #url = 'https://www.mambiente.madrid.es/opendata/horario.xml' # define XML location
 
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'lxml')
 
-        data_container = soup.find_all("dato_horario")
+        data_container = soup.find_all(self.args[0])
         for data in data_container:
 
-            town = data.find("municipio").contents[0]
-            air_station = data.find("punto_muestreo").contents[0][:8]
-            messure = data.find("magnitud").contents[0]
+            town = data.find(self.args[1]).contents[0]
+            air_station = data.find(self.args[2]).contents[0][:8]
+            messure = data.find(self.args[3]).contents[0]
 
             value = 'N'
             for verified_string in verified_list:
                 if(data.find(verified_string).contents[0] == 'N'):
                     break
                 else:
-                    value = float(data.find(verified_string.replace('v','h')).contents[0])
+                    value = float(data.find(verified_string.replace(self.args[5],self.args[4])).contents[0])
 
             if(not (air_station in air_stations)):
                 air_stations[air_station] = list()
