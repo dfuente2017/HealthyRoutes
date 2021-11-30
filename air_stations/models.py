@@ -5,7 +5,7 @@ from djongo import models
 # Create your models here.
 
 class Messures(models.Model):
-    id = models.IntegerField(primary_key = True)
+    id = models.ObjectIdField()
     no2_messure = models.IntegerField(null = True)      #Dioxido de nitrogeno   -> 7
     so2_messure = models.IntegerField(null = True)      #Dioxido de azufre      -> 1 
     co_messure = models.IntegerField(null = True)       #Monoxido de carbono    -> 6

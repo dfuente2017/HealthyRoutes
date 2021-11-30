@@ -42,17 +42,18 @@ class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: tow
             if(not (air_station in air_stations)):
                 air_stations[air_station] = list()
 
-            air_stations[air_station].append((messure,value))
-            #print(town + " " + air_station + " " + messure + " " + value)
+            if value != 'N':
+                air_stations[air_station].append((messure,value))
 
-        #print(air_stations)
         self.save_messures(air_stations)
 
 
     def save_messures(self, air_stations = dict()):
         keys = list(air_stations.keys())
+        messure_id = 0
 
         for air_station in air_stations:
+            messure_id += 1
             no2_messure = None
             so2_messure = None
             co_messure = None
@@ -61,9 +62,9 @@ class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: tow
             o3_messure =  None
             btx_messure = None
 
-            print(air_stations[air_station])
             for messure in air_stations[air_station]:
-                print(messure)
+                if messure[0] == 'id':
+                    messure_id = messure[1]
                 if messure[0] == '1':
                     so2_messure = messure[1]
                 if messure[0] == '6':
@@ -79,26 +80,10 @@ class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: tow
                 if messure[0] == '30':
                     btx_messure = messure[1]
 
-            print(so2_messure)
-            print(co_messure)
-            print(no2_messure)
-            print(pm2_5_messure)
-            print(pm10_messure)
-            print(o3_messure)
-            print(btx_messure)
-
-            """messure_db = Messures.objects.create(so2_messure = so2_messure, co_messure = co_messure, 
-                                            no2_messure = no2_messure, pm2_5_messure = pm2_5_messure, 
-                                            pm10_messure = pm10_messure, o3_messure = o3_messure, btx_messure = btx_messure)"""
-
-            messure_db = {'so2_messure':so2_messure, 'co_messure':co_messure, 'no2_messure':no2_messure, 
-                            'pm2_5_messure':pm2_5_messure, 'pm10_messure':pm10_messure, 'o3_messure':o3_messure, 'btx_messure':btx_messure}
-                
+            messure_db = {'id':messure_id, 'so2_messure':so2_messure, 'co_messure':co_messure, 'no2_messure':no2_messure, 
+                            'pm2_5_messure':pm2_5_messure, 'pm10_messure':pm10_messure, 'o3_messure':o3_messure, 'btx_messure':btx_messure}   
             air_station_db = AirStation.objects.get(id = keys[0])
-
             air_station_db.messures = messure_db
-            #air_station_db.save()
+            air_station_db.save()
 
-            print(messure_db)
             keys.remove(keys[0])
-    
