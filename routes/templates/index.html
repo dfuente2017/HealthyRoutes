@@ -308,7 +308,21 @@
             </div>
         </div>
         <div class = "col-sm-8 mt-3">
-            <div id="mapid" class="map" style="height: 70%; width: 100%;"></div>
+            <div id="map" class="map" style="height: 70%; width: 100%;"></div>
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+            <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+            <script>
+            const tilesProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+
+            var map = L.map('map').setView([0, 0], 2);
+            L.tileLayer(tilesProvider, {
+                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.Control.geocoder({
+                geocoder: L.Control.Geocoder.nominatim()
+            }).addTo(map);
+            </script>
         </div>
         <div class = "col-sm-2">
             <div class="card bg-primary text-white col-sm-12 mt-3 mb-3">
@@ -425,8 +439,4 @@
         </div>
     </div>
 </div>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-crossorigin=""></script>
-<script src="{% static 'map.js' %}"></script>
 {% endblock %}
