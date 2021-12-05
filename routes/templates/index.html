@@ -312,16 +312,31 @@
             <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
             <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
             <script>
-            const tilesProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+                const tilesProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 
-            var map = L.map('map').setView([0, 0], 2);
-            L.tileLayer(tilesProvider, {
-                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+                var map = L.map('map').setView([40.417,-3.703],13);
 
-            L.Control.geocoder({
-                geocoder: L.Control.Geocoder.nominatim()
-            }).addTo(map);
+                var routeMarkersOptions = {
+                    clickable: false,
+                    draggable: true
+                }
+
+                map.doubleClickZoom.disable();
+                L.tileLayer(tilesProvider, {
+                    maxZoom: 18
+                }).addTo(map);
+
+                L.Control.geocoder({
+                    geocoder: L.Control.Geocoder.nominatim()
+                }).addTo(map);
+
+                var nMarkers = 0;
+                map.on("dblclick", function(e){
+                    if(nMarkers < 2){
+                        new L.Marker([e.latlng.lat, e.latlng.lng], routeMarkersOptions).addTo(map);
+                        nMarkers++;
+                    }
+                })
             </script>
         </div>
         <div class = "col-sm-2">

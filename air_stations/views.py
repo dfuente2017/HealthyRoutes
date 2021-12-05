@@ -1,8 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from .models import Country, Province, Town
+from .models import AirStation, Country, Province, Town
 from django.http import JsonResponse
 from air_stations.services.FactoryReadCsv import FactoryReadCsv
+
+
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response as ApiResponse
+from .serializers import AirStationSerializer
 
 # Create your views here.
 
@@ -59,3 +65,10 @@ def convert_list_into_dict(provinces = list()):
     for province in provinces:
         result[province.id] = province.name
     return result
+
+
+@api_view(['GET'])
+def api_get_air_stations(request):
+    air_stations = AirStation.objects.all()
+    api_objetcs = AirStationSerializer(air_stations, many=True)
+    return ApiResponse(api_objetcs.data)

@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 
 from users.views import login, register, logout, profile
 from routes.views import index
-from air_stations.views import upload_air_stations, get_provinces, get_towns
+from air_stations.views import upload_air_stations, get_provinces, get_towns, api_get_air_stations
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,6 +32,7 @@ urlpatterns = [
     path('upload-air-stations', upload_air_stations),
     path('get/provinces', get_provinces),
     path('get/towns', get_towns),
+    path('api/air_stations', api_get_air_stations),
 ]
 
 if settings.DEBUG:
