@@ -313,22 +313,66 @@
             <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
             <script>
                 const tilesProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-
-                var map = L.map('map').setView([40.417,-3.703],13);
-
-                var routeMarkersOptions = {
-                    clickable: false,
+                var airStations = new Array();
+                var airStationsMarkersOptions = {
+                    clickable: true,
                     draggable: true
                 }
+                //var layerGroup = new L.layerGroup(); 
+
+                /*Implement a method to request the towns ids*/
+                getAirStations(79);
+                
+
+                function getAirStations(town){
+                    $.ajax({
+                        url:'api/air_stations',
+                        type: 'get',
+                        data: {
+                            town_id: town
+                        },
+                        success: function(response) {
+                            for(let key in response){
+                                jsonObject = response[key]
+                                putAirStationMarker(jsonObject.name, jsonObject.latitude, jsonObject.longitude, jsonObject.messures)
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            alert(textStatus + ':' + errorThrown)
+                        }
+                    });
+                }
+                function putAirStationMarker(name, latitude, longitude, messures){
+                    var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + messures).addTo(map);
+                    var circle = new L.circle([latitude,longitude], 1500).addTo(map);
+
+                    /*layerGroup.addLayer(L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + ' ' + messures + '</br> Prueba'));
+                    layerGroup.addLayer(L.circle([latitude,longitude], 1500));*/
+                }
+
+
+                var map = L.map('map', {
+                    center: [40.417,-3.703],
+                    zoom: 13,
+                    //layers: [layerGroup]
+                });
+
+                //layerGroup.addTo(map);
+
+                /* var overlayMaps = {
+                    "Air Stations": layerGroup
+                };
+                L.control.layers(null, overlayMaps).addTo(map);*/
 
                 map.doubleClickZoom.disable();
                 L.tileLayer(tilesProvider, {
                     maxZoom: 18
                 }).addTo(map);
 
-                L.Control.geocoder({
-                    geocoder: L.Control.Geocoder.nominatim()
-                }).addTo(map);
+                var routeMarkersOptions = {
+                    clickable: true,
+                    draggable: true
+                }
 
                 var nMarkers = 0;
                 map.on("dblclick", function(e){
@@ -337,6 +381,10 @@
                         nMarkers++;
                     }
                 })
+
+                /*L.Control.geocoder({
+                    geocoder: L.Control.Geocoder.nominatim()
+                }).addTo(map);*/
             </script>
         </div>
         <div class = "col-sm-2">

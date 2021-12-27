@@ -41,6 +41,7 @@ def get_provinces(request):
             country = request.GET.get('country_id', 0)  #Esta puesto que si no se recibe pais saque a España
             response = convert_list_into_dict(Province.objects.filter(country = country))
         except Exception as e:
+            response = dict()
             response['error'] = str(e)
         return JsonResponse(response)
     else:
@@ -53,6 +54,7 @@ def get_towns(request):
             province = request.GET.get('province_id', -1)
             response = convert_list_into_dict(Town.objects.filter(province = province))
         except Exception as e:
+            response = dict()
             response['error'] = str(e)
         return JsonResponse(response)
     else:

@@ -88,6 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'healthyroutesdb',
+        'ENFORCE_SCHEMA': False,
     }
 }
 
