@@ -5,4 +5,4 @@ from .models import AirStation
 class AirStationSerializer(serializers.ModelSerializer):
     class Meta():
         model = AirStation
-        fields = ('id', 'name', 'latitude', 'longitude', 'messures')
+        fields = ('id', 'name', 'latitude', 'longitude', 'messures', 'air_quality')

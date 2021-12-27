@@ -316,7 +316,7 @@
                 var airStations = new Array();
                 var airStationsMarkersOptions = {
                     clickable: true,
-                    draggable: true
+                    draggable: false
                 }
                 //var layerGroup = new L.layerGroup(); 
 
@@ -334,7 +334,7 @@
                         success: function(response) {
                             for(let key in response){
                                 jsonObject = response[key]
-                                putAirStationMarker(jsonObject.name, jsonObject.latitude, jsonObject.longitude, jsonObject.messures)
+                                putAirStationMarker(jsonObject.name, jsonObject.latitude, jsonObject.longitude, jsonObject.messures, jsonObject.air_quality)
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown){
@@ -342,12 +342,50 @@
                         }
                     });
                 }
-                function putAirStationMarker(name, latitude, longitude, messures){
-                    var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + messures).addTo(map);
-                    var circle = new L.circle([latitude,longitude], 1500).addTo(map);
+                function putAirStationMarker(name, latitude, longitude, messures, air_quality){
+                    var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality)).addTo(map);
+                    var circleColor = getCircleColor(air_quality)
+                    var circle = new L.circle([latitude,longitude],{
+                        color: circleColor,
+                        fillColor: circleColor, 
+                        fillOpacity: 0.3,
+                        radius: 1500
+                    }).addTo(map);
 
                     /*layerGroup.addLayer(L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + ' ' + messures + '</br> Prueba'));
                     layerGroup.addLayer(L.circle([latitude,longitude], 1500));*/
+                }
+                function airQualityTraduction(air_quality){
+                    switch(air_quality){
+                        case 5:
+                            return "Muy bueno"
+                        case 4:
+                            return "Bueno"
+                        case 3:
+                            return "Regular"
+                        case 2:
+                            return "Malo"
+                        case 1:
+                            return "Muy malo"
+                        default:
+                            return "Desconocido"
+                    }
+                }
+                function getCircleColor(air_quality){
+                    switch(air_quality){
+                        case 5:
+                            return "#00FFFB"
+                        case 4:
+                            return "#50C8A4"
+                        case 3:
+                            return "#FFFF01"
+                        case 2:
+                            return "#FF4F5C"
+                        case 1:
+                            return "#BD0100"
+                        default:
+                            return "#C3C3C3"
+                    }
                 }
 
 
