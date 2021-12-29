@@ -1,0 +1,563 @@
+{% extends "main.html" %}
+
+{% block content %}
+{% load static %}
+
+<div class = "container-fluid">
+    <div class = "row m-3">
+        <div class="col-sm-2">
+            <div class = "row">
+                <div class="card bg-primary text-white col-sm-12 mt-3">
+                    <!--<div class = "row">
+                        <div class="col-sm-12">
+                            <p>Para situar el punto de inicio, haz doble click en el mapa, y para despues situar el punto de llegada haz lo mismo tambien.</p>
+                        </div>
+                    </div>-->
+                    <div class = "row mt-3">
+                        <div class="col-sm-12">
+                            <div class = "form-group text-center">
+                                <button id="remove-markers-button" type="button" class="btn btn-secondary" disabled onclick="removeMarkers();">Eliminar puntos<span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "row mt-3" id = "routes_variation" hidden>
+                        <div class = "form-group search-forms">
+                            <input id = "route_variation" type = "text" class = "form-control" placeholder = "Variación de las rutas">
+                        </div>
+                    </div>
+                    <div class = "row mb-4">
+                        <div class="col-sm-12 text-right">
+                            <a href="#" onclick="showRouteVariation();">Variacion de las rutas (km)&nbsp;&nbsp;<i id="routes_variation_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                        </div>
+                    </div>
+                    <div class = "row">
+                        <div class="col-sm-12">
+                            <div class = "form-group text-right">
+                                <button type="button" class="btn btn-secondary">Buscar ruta</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class = "row">
+                <h1>Ranking</h1>
+                <div class = "card bg-primary text-white col-sm-12 mt-3">
+                    <div class="row">
+                        <div class="col-sm-12 text-right mt-2">
+                            <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>87</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <h2>4.75 km</h2>
+                        </div>
+                    </div>
+                    <div id="basic_info" class = "row mt-3">
+                        <div class = "col-sm-6">
+                            <h5>El 42% de la ruta tiene un calidad de aire muy buena</h5>
+                        </div>
+                        <div class = "col-sm-6">
+                            <h5>El 89% de la ruta transcurre por zonas verdes</h5>
+                        </div>
+                    </div>
+                    <div id="extended_info" hidden>
+                        <div class="row mt-3">
+                            <div class="col-sm-6">
+                                <h5 class="mr-5">Zonas verdes: 67%</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>Zonas no verde: 33%</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-12">
+                                <h5>Estado de la calidad del aire:</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <img class="ml-5 pilots" src="img/dark-green-pilot.png">36%</img>
+                            <img class="ml-5 pilots" src="img/green-pilot.png" >52%</img>
+                            <img class="ml-5 pilots" src="img/yellow-pilot.png">5%</img>
+                            <img class="ml-5 pilots" src="img/orange-pilot.png">4%</img>
+                            <img class="ml-5 pilots" src="img/red-pilot.png">2%</img>
+                        </div>
+                    </div>
+                    <div class ="row mb-2 mt-2">
+                        <div class="col-sm-6 text-left">
+                            <button type="button" class="btn btn-secondary">Ruta completada</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a href="#" onclick="moreInfo();"><i id="info_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class = "card bg-primary text-white col-sm-12 mt-3">
+                    <div class="row">
+                        <div class="col-sm-12 text-right mt-2">
+                            <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>87</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <h2>4.75 km</h2>
+                        </div>
+                    </div>
+                    <div id="basic_info" class = "row mt-3">
+                        <div class = "col-sm-6">
+                            <h5>El 42% de la ruta tiene un calidad de aire muy buena</h5>
+                        </div>
+                        <div class = "col-sm-6">
+                            <h5>El 89% de la ruta transcurre por zonas verdes</h5>
+                        </div>
+                    </div>
+                    <div id="extended_info" hidden>
+                        <div class="row mt-3">
+                            <div class="col-sm-6">
+                                <h5 class="mr-5">Zonas verdes: 67%</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>Zonas no verde: 33%</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-12">
+                                <h5>Estado de la calidad del aire:</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <img class="ml-5 pilots" src="img/dark-green-pilot.png">36%</img>
+                            <img class="ml-5 pilots" src="img/green-pilot.png" >52%</img>
+                            <img class="ml-5 pilots" src="img/yellow-pilot.png">5%</img>
+                            <img class="ml-5 pilots" src="img/orange-pilot.png">4%</img>
+                            <img class="ml-5 pilots" src="img/red-pilot.png">2%</img>
+                        </div>
+                    </div>
+                    <div class ="row mb-2 mt-2">
+                        <div class="col-sm-6 text-left">
+                            <button type="button" class="btn btn-secondary">Ruta completada</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a href="#" onclick="moreInfo();"><i id="info_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class = "card bg-primary text-white col-sm-12 mt-3">
+                    <div class="row">
+                        <div class="col-sm-12 text-right mt-2">
+                            <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>87</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <h2>4.75 km</h2>
+                        </div>
+                    </div>
+                    <div id="basic_info" class = "row mt-3">
+                        <div class = "col-sm-6">
+                            <h5>El 42% de la ruta tiene un calidad de aire muy buena</h5>
+                        </div>
+                        <div class = "col-sm-6">
+                            <h5>El 89% de la ruta transcurre por zonas verdes</h5>
+                        </div>
+                    </div>
+                    <div id="extended_info" hidden>
+                        <div class="row mt-3">
+                            <div class="col-sm-6">
+                                <h5 class="mr-5">Zonas verdes: 67%</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>Zonas no verde: 33%</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-12">
+                                <h5>Estado de la calidad del aire:</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <img class="ml-5 pilots" src="img/dark-green-pilot.png">36%</img>
+                            <img class="ml-5 pilots" src="img/green-pilot.png" >52%</img>
+                            <img class="ml-5 pilots" src="img/yellow-pilot.png">5%</img>
+                            <img class="ml-5 pilots" src="img/orange-pilot.png">4%</img>
+                            <img class="ml-5 pilots" src="img/red-pilot.png">2%</img>
+                        </div>
+                    </div>
+                    <div class ="row mb-2 mt-2">
+                        <div class="col-sm-6 text-left">
+                            <button type="button" class="btn btn-secondary">Ruta completada</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a href="#" onclick="moreInfo();"><i id="info_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class = "card bg-primary text-white col-sm-12 mt-3">
+                    <div class="row">
+                        <div class="col-sm-12 text-right mt-2">
+                            <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>87</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <h2>4.75 km</h2>
+                        </div>
+                    </div>
+                    <div id="basic_info" class = "row mt-3">
+                        <div class = "col-sm-6">
+                            <h5>El 42% de la ruta tiene un calidad de aire muy buena</h5>
+                        </div>
+                        <div class = "col-sm-6">
+                            <h5>El 89% de la ruta transcurre por zonas verdes</h5>
+                        </div>
+                    </div>
+                    <div id="extended_info" hidden>
+                        <div class="row mt-3">
+                            <div class="col-sm-6">
+                                <h5 class="mr-5">Zonas verdes: 67%</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>Zonas no verde: 33%</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-12">
+                                <h5>Estado de la calidad del aire:</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <img class="ml-5 pilots" src="img/dark-green-pilot.png">36%</img>
+                            <img class="ml-5 pilots" src="img/green-pilot.png" >52%</img>
+                            <img class="ml-5 pilots" src="img/yellow-pilot.png">5%</img>
+                            <img class="ml-5 pilots" src="img/orange-pilot.png">4%</img>
+                            <img class="ml-5 pilots" src="img/red-pilot.png">2%</img>
+                        </div>
+                    </div>
+                    <div class ="row mb-2 mt-2">
+                        <div class="col-sm-6 text-left">
+                            <button type="button" class="btn btn-secondary">Ruta completada</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a href="#" onclick="moreInfo();"><i id="info_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class = "card bg-primary text-white col-sm-12 mt-3">
+                    <div class="row">
+                        <div class="col-sm-12 text-right mt-2">
+                            <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>87</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <h2>4.75 km</h2>
+                        </div>
+                    </div>
+                    <div id="basic_info" class = "row mt-3">
+                        <div class = "col-sm-6">
+                            <h5>El 42% de la ruta tiene un calidad de aire muy buena</h5>
+                        </div>
+                        <div class = "col-sm-6">
+                            <h5>El 89% de la ruta transcurre por zonas verdes</h5>
+                        </div>
+                    </div>
+                    <div id="extended_info" hidden>
+                        <div class="row mt-3">
+                            <div class="col-sm-6">
+                                <h5 class="mr-5">Zonas verdes: 67%</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>Zonas no verde: 33%</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-12">
+                                <h5>Estado de la calidad del aire:</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <img class="ml-5 pilots" src="img/dark-green-pilot.png">36%</img>
+                            <img class="ml-5 pilots" src="img/green-pilot.png" >52%</img>
+                            <img class="ml-5 pilots" src="img/yellow-pilot.png">5%</img>
+                            <img class="ml-5 pilots" src="img/orange-pilot.png">4%</img>
+                            <img class="ml-5 pilots" src="img/red-pilot.png">2%</img>
+                        </div>
+                    </div>
+                    <div class ="row mb-2 mt-2">
+                        <div class="col-sm-6 text-left">
+                            <button type="button" class="btn btn-secondary">Ruta completada</button>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a href="#" onclick="moreInfo();"><i id="info_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class = "col-sm-8 mt-3">
+
+            <div id="map" class="map" style="height: 70%; width: 100%;"></div>
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+            <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+            <script>
+                const tilesProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+                var airStations = new Array();
+                var airStationsMarkersOptions = {
+                    clickable: true,
+                    draggable: false
+                }
+
+                var nMarkers = 0;
+                var routeMarkers = new Array();
+
+                var airStationsLayer = new L.layerGroup(); 
+
+                
+                getAirStations();
+
+                function getAirStations(){
+                    $.ajax({
+                        url:'api/air_stations',
+                        type: 'get',
+                        data: {
+                            //town_id: getTown()
+                        },
+                        success: function(response) {
+                            for(let key in response){
+                                jsonObject = response[key]
+                                putAirStationMarker(jsonObject.name, jsonObject.latitude, jsonObject.longitude, jsonObject.messures, jsonObject.air_quality)
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            alert(textStatus + ':' + errorThrown)
+                        }
+                    });
+                }
+                /*Implement a method to request the towns ids*/
+                function getTown(){
+                    
+                }
+                function putAirStationMarker(name, latitude, longitude, messures, air_quality){
+                    //var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality));
+                    var circleColor = getCircleColor(air_quality)
+                    var circle = new L.circle([latitude,longitude],{
+                        color: circleColor,
+                        fillColor: circleColor, 
+                        fillOpacity: 0.3,
+                        radius: 1500
+                    }).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality));;
+
+                    //airStationsLayer.addLayer(marker);
+                    airStationsLayer.addLayer(circle);
+                }
+                function airQualityTraduction(air_quality){
+                    switch(air_quality){
+                        case 5:
+                            return "Muy bueno"
+                        case 4:
+                            return "Bueno"
+                        case 3:
+                            return "Regular"
+                        case 2:
+                            return "Malo"
+                        case 1:
+                            return "Muy malo"
+                        default:
+                            return "Desconocido"
+                    }
+                }
+                function getCircleColor(air_quality){
+                    switch(air_quality){
+                        case 5:
+                            return "#00FFFB"
+                        case 4:
+                            return "#5AB507"
+                        case 3:
+                            return "#FFFF01"
+                        case 2:
+                            return "#FEA500"
+                        case 1:
+                            return "#BD0100"
+                        default:
+                            return "#C3C3C3"
+                    }
+                }
+
+                var map = L.map('map', {
+                    center: [40.417,-3.703],
+                    zoom: 13,
+                    layers: [airStationsLayer]
+                });
+
+                var overlayMaps = {
+                    "Estaciones de calidad del aire": airStationsLayer
+                }
+
+                L.control.layers(null, overlayMaps).addTo(map);
+
+                map.doubleClickZoom.disable();
+                L.tileLayer(tilesProvider, {
+                    maxZoom: 18
+                }).addTo(map);
+
+                var routeMarkersOptions = {
+                    clickable: true,
+                    draggable: true
+                }
+
+                
+                map.on("dblclick", function(e){
+                    if(nMarkers < 2){
+                        document.getElementById("remove-markers-button").disabled = false;
+                        routeMarkers.push(new L.Marker([e.latlng.lat, e.latlng.lng], routeMarkersOptions).addTo(map));
+                        nMarkers++;
+                    }
+                })
+
+                function removeMarkers(){
+                    nMarkers = 0;
+
+                    routeMarkers.forEach(function(marker){
+                        map.removeLayer(marker);
+                    });
+
+                    routeMarkers = new Array();
+                    document.getElementById("remove-markers-button").disabled = true;
+                }
+
+                /*L.Control.geocoder({
+                    geocoder: L.Control.Geocoder.nominatim()
+                }).addTo(map);*/
+            </script>
+        </div>
+        <div class = "col-sm-2">
+            <div class="card bg-primary text-white col-sm-12 mt-3 mb-3">
+                <h1>Indicaciones</h1>
+            </div>
+            <div class="card bg-secondary text-white mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h5>1.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <i class="glyphicon glyphicon-arrow-up"></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>Sigue recto</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>200 m</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-secondary text-white mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h5>2.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>Gire a la izquierda</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>800 m</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-secondary text-white mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h5>3.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>Gire a la derecha</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>500 m</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-secondary text-white mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h5>4.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <i class="glyphicon glyphicon-arrow-up"></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>Sigue recto</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>200 m</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-secondary text-white mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h5>5.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>Gire a la izquierda</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>800 m</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-secondary text-white mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h5>6.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>Gire a la derecha</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5>500 m</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

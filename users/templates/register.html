@@ -17,47 +17,47 @@
 	</head>
 	<body>
 		<div class="container">
-		<div class="row">
-			<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
-				<div class="row h-15">
-					<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1 non-active"> Iniciar Sesión</a>
-					<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2"> Registrarse</a>
-				</div>
-				<div="row">
-					<form id="register" action="/register/" method="POST">
-						{% csrf_token %}
-						<input id="email" name="email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
-						{% if message_email %}
-							<p style="color:red;">{{ message_email }}</p>
-						{% endif %}
-                        <input id="nick" name="nick" type="text" class="form-control w-75 mx-auto mt-5" placeholder="Nick">
-						{% if message_nick %}
-							<p style="color:red;">{{ message_nick }}</p>
-						{% endif %}
-						<div class="input-group w-75 mx-auto mt-5">
-							<input id="pwd1" name="pwd1" type="password" class="form-control" placeholder="Contraseña" onchange="checkForm('register-button');">
-							<div class="input-group-append">
-								<button class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd1');">Mostrar contraseña</button>
+			<div class="row">
+				<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
+					<div class="row h-15">
+						<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1 non-active"> Iniciar Sesión</a>
+						<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2"> Registrarse</a>
+					</div>
+					<div="row">
+						<form id="register" action="/register/" method="POST">
+							{% csrf_token %}
+							<input id="email" name="email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
+							{% if message_email %}
+								<p style="color:red;">{{ message_email }}</p>
+							{% endif %}
+							<input id="nick" name="nick" type="text" class="form-control w-75 mx-auto mt-5" placeholder="Nick">
+							{% if message_nick %}
+								<p style="color:red;">{{ message_nick }}</p>
+							{% endif %}
+							<div class="input-group w-75 mx-auto mt-5">
+								<input id="pwd1" name="pwd1" type="password" class="form-control" placeholder="Contraseña" onchange="checkForm('register-button');">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd1');">Mostrar contraseña</button>
+								</div>
 							</div>
-						</div>
-						{% if message_pwd %}
-							<p style="color:red;">{{ message_pwd }}</p>
-						{% endif %}
+							{% if message_pwd %}
+								<p style="color:red;">{{ message_pwd }}</p>
+							{% endif %}
 
-						<div class="input-group w-75 mx-auto mt-5">
-							<input id="pwd2" name="pwd2" type="password" class="form-control" placeholder="Repita la contraseña" onchange="checkForm('register-button');">
-							<div class="input-group-append">
-								<button class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd2');">Mostrar contraseña</button>
+							<div class="input-group w-75 mx-auto mt-5">
+								<input id="pwd2" name="pwd2" type="password" class="form-control" placeholder="Repita la contraseña" onchange="checkForm('register-button');">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd2');">Mostrar contraseña</button>
+								</div>
 							</div>
-						</div>
-                        <p id="pass-dis" hidden style="color:red;">Las contraseñas no coinciden.</p>
-                        <p id="pass-range" hidden style="color:red;">La contraseña debe contener una mayuscula, una minuscula y un número.</p>
-                        <p id="pass-length" hidden style="color:red;">La contraseña debe tener una longitud de al menos 10 caracteres.</p>
-						<button id="register-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3" disabled>Registrarse</button>
-					</form>
+							<p id="pass-dis" hidden style="color:red;">Las contraseñas no coinciden.</p>
+							<p id="pass-range" hidden style="color:red;">La contraseña debe contener una mayuscula, una minuscula y un número.</p>
+							<p id="pass-length" hidden style="color:red;">La contraseña debe tener una longitud de al menos 10 caracteres.</p>
+							<button id="register-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3" disabled>Registrarse</button>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
 		</div>
 	</body>
 </html>

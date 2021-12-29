@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
     'users',
+    'routes',
+    'air_stations',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -60,6 +63,8 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR,'HealthyRoutes/templates/'),
             os.path.join(BASE_DIR,'users/templates/'),
+            os.path.join(BASE_DIR,'routes/templates/'),
+            os.path.join(BASE_DIR,'air_stations/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -83,6 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'healthyroutesdb',
+        'ENFORCE_SCHEMA': False,
     }
 }
 

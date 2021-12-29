@@ -85,3 +85,12 @@ function showPassword(idInput){
 		document.getElementById(idInput).type = "password";
 	}
 }
+
+function showRouteVariation(){
+	document.getElementById("routes_variation").hidden = !document.getElementById("routes_variation").hidden;
+	if(document.getElementById("routes_variation_button").getAttribute("Class") == "glyphicon glyphicon-chevron-down"){
+		document.getElementById("routes_variation_button").setAttribute("Class","glyphicon glyphicon-chevron-up");
+	}else{
+		document.getElementById("routes_variation_button").setAttribute("Class","glyphicon glyphicon-chevron-down");
+	}
+}
