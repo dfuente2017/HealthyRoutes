@@ -325,7 +325,7 @@
                 var nMarkers = 0;
                 var routeMarkers = new Array();
 
-                //var layerGroup = new L.layerGroup(); 
+                var airStationsLayer = new L.layerGroup(); 
 
                 /*Implement a method to request the towns ids*/
                 getAirStations(79);
@@ -350,17 +350,17 @@
                     });
                 }
                 function putAirStationMarker(name, latitude, longitude, messures, air_quality){
-                    var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality)).addTo(map);
+                    //var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality));
                     var circleColor = getCircleColor(air_quality)
                     var circle = new L.circle([latitude,longitude],{
                         color: circleColor,
                         fillColor: circleColor, 
                         fillOpacity: 0.3,
                         radius: 1500
-                    }).addTo(map);
+                    }).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality));;
 
-                    /*layerGroup.addLayer(L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + ' ' + messures + '</br> Prueba'));
-                    layerGroup.addLayer(L.circle([latitude,longitude], 1500));*/
+                    //airStationsLayer.addLayer(marker);
+                    airStationsLayer.addLayer(circle);
                 }
                 function airQualityTraduction(air_quality){
                     switch(air_quality){
@@ -383,11 +383,11 @@
                         case 5:
                             return "#00FFFB"
                         case 4:
-                            return "#50C8A4"
+                            return "#5AB507"
                         case 3:
                             return "#FFFF01"
                         case 2:
-                            return "#FF4F5C"
+                            return "#FEA500"
                         case 1:
                             return "#BD0100"
                         default:
@@ -395,19 +395,17 @@
                     }
                 }
 
-
                 var map = L.map('map', {
                     center: [40.417,-3.703],
                     zoom: 13,
-                    //layers: [layerGroup]
+                    layers: [airStationsLayer]
                 });
 
-                //layerGroup.addTo(map);
+                var overlayMaps = {
+                    "Estaciones de calidad del aire": airStationsLayer
+                }
 
-                /* var overlayMaps = {
-                    "Air Stations": layerGroup
-                };
-                L.control.layers(null, overlayMaps).addTo(map);*/
+                L.control.layers(null, overlayMaps).addTo(map);
 
                 map.doubleClickZoom.disable();
                 L.tileLayer(tilesProvider, {
