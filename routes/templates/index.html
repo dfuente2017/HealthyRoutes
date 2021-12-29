@@ -8,17 +8,19 @@
         <div class="col-sm-2">
             <div class = "row">
                 <div class="card bg-primary text-white col-sm-12 mt-3">
-                    <div class = "row">	
-                        <div class = "form-group search-forms">
-                            <input id = "init_point" type = "text" class = "form-control" placeholder = "Punto de origen">
+                    <!--<div class = "row">
+                        <div class="col-sm-12">
+                            <p>Para situar el punto de inicio, haz doble click en el mapa, y para despues situar el punto de llegada haz lo mismo tambien.</p>
+                        </div>
+                    </div>-->
+                    <div class = "row mt-3">
+                        <div class="col-sm-12">
+                            <div class = "form-group text-center">
+                                <button id="remove-markers-button" type="button" class="btn btn-secondary" disabled onclick="removeMarkers();">Eliminar puntos<span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
                         </div>
                     </div>
-                    <div class = "row">
-                        <div class = "form-group search-forms">
-                            <input id = "end_point" type = "text" class = "form-control" placeholder = "Punto de destino">
-                        </div>
-                    </div>
-                    <div class = "row" id = "routes_variation" hidden>
+                    <div class = "row mt-3" id = "routes_variation" hidden>
                         <div class = "form-group search-forms">
                             <input id = "route_variation" type = "text" class = "form-control" placeholder = "Variación de las rutas">
                         </div>
@@ -31,7 +33,7 @@
                     <div class = "row">
                         <div class="col-sm-12">
                             <div class = "form-group text-right">
-                                <button type="button" class="btn btn-secondary">Buscar</button>
+                                <button type="button" class="btn btn-secondary">Buscar ruta</button>
                             </div>
                         </div>
                         
@@ -308,6 +310,7 @@
             </div>
         </div>
         <div class = "col-sm-8 mt-3">
+
             <div id="map" class="map" style="height: 70%; width: 100%;"></div>
             <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
             <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -318,6 +321,10 @@
                     clickable: true,
                     draggable: false
                 }
+
+                var nMarkers = 0;
+                var routeMarkers = new Array();
+
                 //var layerGroup = new L.layerGroup(); 
 
                 /*Implement a method to request the towns ids*/
@@ -412,13 +419,25 @@
                     draggable: true
                 }
 
-                var nMarkers = 0;
+                
                 map.on("dblclick", function(e){
                     if(nMarkers < 2){
-                        new L.Marker([e.latlng.lat, e.latlng.lng], routeMarkersOptions).addTo(map);
+                        document.getElementById("remove-markers-button").disabled = false;
+                        routeMarkers.push(new L.Marker([e.latlng.lat, e.latlng.lng], routeMarkersOptions).addTo(map));
                         nMarkers++;
                     }
                 })
+
+                function removeMarkers(){
+                    nMarkers = 0;
+
+                    routeMarkers.forEach(function(marker){
+                        map.removeLayer(marker);
+                    });
+
+                    routeMarkers = new Array();
+                    document.getElementById("remove-markers-button").disabled = true;
+                }
 
                 /*L.Control.geocoder({
                     geocoder: L.Control.Geocoder.nominatim()
