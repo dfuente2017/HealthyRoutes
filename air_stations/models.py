@@ -36,6 +36,7 @@ class Messures(models.Model):
 class AirStation(models.Model):
     id = models.IntegerField(primary_key = True)
     name = models.CharField(max_length = 30, blank = False, null = True)
+    town_id = models.IntegerField(blank = False, null = False)
     latitude = models.DecimalField(blank = False, max_digits=20, decimal_places=18)
     longitude = models.DecimalField(blank = False, max_digits=20, decimal_places=18)
     messures = models.EmbeddedField(model_container = Messures)

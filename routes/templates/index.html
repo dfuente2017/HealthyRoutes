@@ -327,16 +327,15 @@
 
                 var airStationsLayer = new L.layerGroup(); 
 
-                /*Implement a method to request the towns ids*/
-                getAirStations(79);
                 
+                getAirStations();
 
-                function getAirStations(town){
+                function getAirStations(){
                     $.ajax({
                         url:'api/air_stations',
                         type: 'get',
                         data: {
-                            town_id: town
+                            //town_id: getTown()
                         },
                         success: function(response) {
                             for(let key in response){
@@ -348,6 +347,10 @@
                             alert(textStatus + ':' + errorThrown)
                         }
                     });
+                }
+                /*Implement a method to request the towns ids*/
+                function getTown(){
+                    
                 }
                 function putAirStationMarker(name, latitude, longitude, messures, air_quality){
                     //var marker = new L.Marker([latitude, longitude], airStationsMarkersOptions).bindPopup('Estacion de ' + name + '</br>' + 'Estado del aire: ' + airQualityTraduction(air_quality));

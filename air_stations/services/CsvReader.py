@@ -31,7 +31,7 @@ class CsvReader1(CsvReaderInterface):   #args -> [0]:ids_key, [1]: names_key, [2
         town.air_stations = list()
 
         for i in range(len(ids)):
-            air_station = {'id':ids[i], 'name': names[i], 'latitude': latitudes[i], 'longitude': longitudes[i], 'messures': None}
+            air_station = {'id':ids[i], 'name': names[i], 'town_id':town.id, 'latitude': latitudes[i], 'longitude': longitudes[i], 'messures': None}
             town.air_stations.append(air_station)
 
         town.save()
