@@ -49,7 +49,7 @@
                 <div id = "route-ranking-container" class = "row">
                     <h1>Ranking</h1>
                     {% for route in routes %}
-                        <div class = "card bg-primary text-white col-sm-12 mt-3" onclick="";>
+                        <div class = "card bg-primary text-white col-sm-12 mt-3" onclick="getRoute('{{ forloop.counter0 }}')";>
                             <div class="row">
                                 <div class="col-sm-12 text-right mt-2">
                                     <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="extended_info" hidden>
+                            <div id="extended_info_{{ forloop.counter0 }}" hidden>
                                 <div class="row mt-3">
                                     <div class="col-sm-6">
                                         <h5 class="mr-5">Zonas verdes: 67%</h5>
@@ -83,11 +83,11 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2 mb-3">
-                                    <img class="ml-5 pilots" src="img/dark-green-pilot.png">36%</img>
-                                    <img class="ml-5 pilots" src="img/green-pilot.png" >52%</img>
-                                    <img class="ml-5 pilots" src="img/yellow-pilot.png">5%</img>
-                                    <img class="ml-5 pilots" src="img/orange-pilot.png">4%</img>
-                                    <img class="ml-5 pilots" src="img/red-pilot.png">2%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}">36%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}">52%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}">5%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}">4%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}">2%</img>
                                 </div>
                             </div>
                             <div class ="row mb-2 mt-2">
@@ -95,7 +95,7 @@
                                     <button type="button" class="btn btn-secondary">Ruta completada</button>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <a href="#" onclick="moreInfo();"><i id="info_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                                    <a href="#" onclick="moreInfo('{{ forloop.counter0 }}');"><i id="info_button_{{ forloop.counter0 }}" class="glyphicon glyphicon-chevron-down"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -108,13 +108,13 @@
                 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
                 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
                 <script>
-                    function moreInfo(){
-                        if(document.getElementById("info_button").attributes[1].value == "glyphicon glyphicon-chevron-down"){
-                            document.getElementById("extended_info").hidden = false;
-                            document.getElementById("info_button").attributes[1].value = "glyphicon glyphicon-chevron-up";
+                    function moreInfo(n){
+                        if(document.getElementById("info_button_" + n).attributes[1].value == "glyphicon glyphicon-chevron-down"){
+                            document.getElementById("extended_info_" + n).hidden = false;
+                            document.getElementById("info_button_" + n).attributes[1].value = "glyphicon glyphicon-chevron-up";
                         } else{
-                            document.getElementById("extended_info").hidden = true;
-                            document.getElementById("info_button").attributes[1].value = "glyphicon glyphicon-chevron-down";
+                            document.getElementById("extended_info_" + n).hidden = true;
+                            document.getElementById("info_button_" + n).attributes[1].value = "glyphicon glyphicon-chevron-down";
                         }
                     }
 
@@ -252,6 +252,10 @@
                         document.getElementById('endLatitude').value = routeMarkers[1].getLatLng().lat;
                         document.getElementById('endLongitude').value = routeMarkers[1].getLatLng().lng;
                         document.myform.submit();
+                    }
+
+                    function getRoute(n){
+                        //alert(n);
                     }
 
                     /*var routes = JSON.parse("{{routes|escapejs}}");
