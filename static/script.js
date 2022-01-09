@@ -51,11 +51,9 @@ function changePassword(){
 
 function moreInfo(){
 	if(document.getElementById("info_button").attributes[1].value == "glyphicon glyphicon-chevron-down"){
-		document.getElementById("basic_info").hidden = true;
 		document.getElementById("extended_info").hidden = false;
 		document.getElementById("info_button").attributes[1].value = "glyphicon glyphicon-chevron-up";
 	} else{
-		document.getElementById("basic_info").hidden = false;
 		document.getElementById("extended_info").hidden = true;
 		document.getElementById("info_button").attributes[1].value = "glyphicon glyphicon-chevron-down";
 	}

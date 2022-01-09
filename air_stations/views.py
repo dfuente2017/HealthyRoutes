@@ -72,5 +72,5 @@ def convert_list_into_dict(provinces = list()):
 @api_view(['GET'])
 def api_get_air_stations(request):
     air_stations = AirStation.objects.filter(town_id = request.GET.get('town_id', 79))
-    api_objetcs = AirStationSerializer(air_stations, many=True)
-    return ApiResponse(api_objetcs.data)
+    api_objects = AirStationSerializer(air_stations, many=True)
+    return ApiResponse(api_objects.data)
