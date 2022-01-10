@@ -14,6 +14,7 @@
                         <input id='initLongitude' name='initLongitude' type='value' hidden></input>
                         <input id='endLatitude' name='endLatitude' type='value' hidden></input>
                         <input id='endLongitude' name='endLongitude' type='value' hidden></input>
+
                         <!--<div class = "row">
                             <div class="col-sm-12">
                                 <p>Para situar el punto de inicio, haz doble click en el mapa, y para despues situar el punto de llegada haz lo mismo tambien.</p>
@@ -49,7 +50,9 @@
                 <div id = "route-ranking-container" class = "row">
                     <h1>Ranking</h1>
                     {% for route in routes %}
-                        <div class = "card bg-primary text-white col-sm-12 mt-3" onclick="getRoute('{{ forloop.counter0 }}')";>
+                        <div class = "card bg-primary text-white col-sm-12 mt-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
+                            <div id="route_nodes_{{ forloop.counter0 }}" hidden>{{route.nodes}}</div>
+                            <div id="route_instructions_{{ forloop.counter0 }}" hidden>{{route.instructions}}</div>
                             <div class="row">
                                 <div class="col-sm-12 text-right mt-2">
                                     <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
@@ -254,12 +257,12 @@
                         document.myform.submit();
                     }
 
-                    function getRoute(n){
-                        //alert(n);
-                    }
+                    function selectRoute(n){
+                        var nodesHTML = document.getElementById("route_nodes_"+n).innerText.replace(/'/g, '"').replace(/None/g, null);
+                        var nodesParsed = JSON.parse(nodesHTML);
 
-                    /*var routes = JSON.parse("{{routes|escapejs}}");
-                    alert(routes);*/
+                        alert(nodesParsed[0].latitude);
+                    }
 
                     /*L.Control.geocoder({
                         geocoder: L.Control.Geocoder.nominatim()

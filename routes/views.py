@@ -20,9 +20,6 @@ def index(request):
         routes_provider = RoutesProvider(init_lat, init_long, end_lat, end_long, variation)
         routes = routes_provider.get_routes()
 
-        #routes_json = dumps({'prueba1':'prueba1', 'prueba2':'prueba2'})
-        #routes_json = dumps(routes)
-
         return render(request, "index.html", {'routes':routes})
     else:
         print('GET')

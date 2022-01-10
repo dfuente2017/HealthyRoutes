@@ -49,6 +49,17 @@ class RoutesProvider():
 
             route.nodes = nodes
 
+            instructions_json = route_json['instructions']
+            instructions = list()
+
+            for instruction_json in instructions_json:
+                instruction = dict()
+                instruction['distance'] = instruction_json['distance']
+                instruction['text'] = instruction_json['text']
+                instructions.append(instruction)
+
+            route.instructions = instructions
+
             routes.append(route)
 
         return routes

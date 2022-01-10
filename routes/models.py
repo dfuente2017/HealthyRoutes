@@ -11,11 +11,17 @@ class Node(models.Model):
     surface_quality = models.BooleanField(null = True)
 
 
+class Instruction(models.Model):
+    id = models.ObjectIdField()
+    distance = models.DecimalField(max_digits=18, decimal_places=15, null= True)
+    text = models.CharField(max_length=50, null = True)
+
+
 class Route(models.Model):
     id = models.IntegerField(primary_key = True)
     user = models.EmailField(max_length = 60, null = True)
     distance = models.DecimalField(max_digits=18, decimal_places=15, null= True)
     time = models.IntegerField(null= True)
-    #instructions = models.ArrayField(model_container = str())
+    instructions = models.ArrayField(model_container = Instruction, null = True)
     nodes = models.ArrayField(model_container = Node, null= True)
     ranking_puntuation = models.DecimalField(max_digits=18, decimal_places=15, null = True)
