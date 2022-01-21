@@ -50,9 +50,8 @@
                 <div id = "route-ranking-container" class = "row">
                     <h1>Ranking</h1>
                     {% for route in routes %}
-                        <div class = "card bg-primary text-white col-sm-12 mt-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
+                        <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mt-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
                             <div id="route_nodes_{{ forloop.counter0 }}" hidden>{{route.nodes}}</div>
-                            <div id="route_instructions_{{ forloop.counter0 }}" hidden>{{route.instructions}}</div>
                             <div class="row">
                                 <div class="col-sm-12 text-right mt-2">
                                     <a href="#" onclick="like();"><i id="like-icon" class="glyphicon glyphicon-heart-empty"></i></a>
@@ -130,7 +129,9 @@
                     }
 
                     var nMarkers = 0;
+                    var lastRouteShown = 0;
                     var routeMarkers = new Array();
+                    var polyline = null;
 
                     var airStationsLayer = new L.layerGroup();
 
@@ -257,130 +258,74 @@
                         document.myform.submit();
                     }
 
+
                     function selectRoute(n){
                         var nodesHTML = document.getElementById("route_nodes_"+n).innerText.replace(/'/g, '"').replace(/None/g, null);
                         var nodesParsed = JSON.parse(nodesHTML);
 
-                        alert(nodesParsed[0].latitude);
+                        if(polyline != null){
+                            map.removeLayer(polyline);
+                        }
+
+                        /*for(let i=0;i<document.getElementById("instruction_container").children.length-1;i++){
+                            document.getElementById("instructions_" + i).hidden = true;
+                        }*/
+
+                        document.getElementById("instructions_" + lastRouteShown).hidden = true;
+                        lastRouteShown = n;
+
+                        document.getElementById("instructions_" + n).hidden = false;
+
+                        var latlngs = [];
+
+                        for(let i=0;i<nodesParsed.length;i++){
+                            latlngs.push([nodesParsed[i].longitude, nodesParsed[i].latitude]);
+                        }
+                        polyline = L.polyline(latlngs, {color:'#3388ff', weight:5}).addTo(map);
+
+                        map.fitBounds(polyline.getBounds());
                     }
+
+                    
+                    $(document).ready(function() {
+                        if(document.getElementById("route_nodes_0") != null){
+                            selectRoute(0);
+                        }
+                    });
 
                     /*L.Control.geocoder({
                         geocoder: L.Control.Geocoder.nominatim()
                     }).addTo(map);*/
                 </script>
             </div>
-            <div class = "col-sm-2">
+            <div id="instructions_container" class = "col-sm-2">
                 <div class="card bg-primary text-white col-sm-12 mt-3 mb-3">
                     <h1>Indicaciones</h1>
                 </div>
-                <div class="card bg-secondary text-white mt-3">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h5>1.</h5>
-                        </div>
+                {% for route in routes %}
+                    <div id="instructions_{{forloop.counter0}}" hidden>
+                        {% for instruction in route.instructions %}
+                            <div class="card bg-secondary text-white mt-3">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h5>{{forloop.counter}}.</h5>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <!--<div class="col-sm-3 text-center">
+                                        <i class="glyphicon glyphicon-arrow-up"></i>
+                                    </div>-->
+                                    <div class="col-sm-8">
+                                        <h5>{{instruction.text}}</h5>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h5>{{instruction.distance}} m</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <i class="glyphicon glyphicon-arrow-up"></i>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>Sigue recto</h5>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>200 m</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-secondary text-white mt-3">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h5>2.</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <i class="glyphicon glyphicon-arrow-left"></i>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>Gire a la izquierda</h5>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>800 m</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-secondary text-white mt-3">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h5>3.</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <i class="glyphicon glyphicon-arrow-right"></i>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>Gire a la derecha</h5>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>500 m</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-secondary text-white mt-3">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h5>4.</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <i class="glyphicon glyphicon-arrow-up"></i>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>Sigue recto</h5>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>200 m</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-secondary text-white mt-3">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h5>5.</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <i class="glyphicon glyphicon-arrow-left"></i>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>Gire a la izquierda</h5>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>800 m</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-secondary text-white mt-3">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h5>6.</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <i class="glyphicon glyphicon-arrow-right"></i>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>Gire a la derecha</h5>
-                        </div>
-                        <div class="col-sm-4">
-                            <h5>500 m</h5>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

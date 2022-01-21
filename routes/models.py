@@ -13,7 +13,7 @@ class Node(models.Model):
 
 class Instruction(models.Model):
     id = models.ObjectIdField()
-    distance = models.DecimalField(max_digits=18, decimal_places=15, null= True)
+    distance = models.DecimalField(max_digits=18, decimal_places=15, null= True)        #Cambiar a number
     text = models.CharField(max_length=50, null = True)
 
 

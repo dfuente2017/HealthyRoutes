@@ -29,7 +29,7 @@ class RoutesProvider():
     def routes_api_request(self):
         routes = list()
 
-        response = requests.get('https://graphhopper.com/api/1/route?point=' + str(self.init_lat) + ',' + str(self.init_long) + '&point=' + str(self.end_lat) + ',' + str(self.end_long) + '&vehicle=foot&locale=es&calc_points=true&key=1188f6c9-4c8b-49d2-ac9f-e9985adc8758&instructions=true&algorithm=alternative_route&points_encoded=false&ch.disable=true&alternative_route.max_paths=10&alternative_route.max_weight_factor=' + str(self.variation))
+        response = requests.get('https://graphhopper.com/api/1/route?point=' + str(self.init_lat) + ',' + str(self.init_long) + '&point=' + str(self.end_lat) + ',' + str(self.end_long) + '&vehicle=foot&locale=es&calc_points=true&key=a43ea5ea-ff53-4802-a731-6c11aaa06109&instructions=true&algorithm=alternative_route&points_encoded=false&ch.disable=true&alternative_route.max_paths=10&alternative_route.max_weight_factor=' + str(self.variation))
         routes_json = response.json()['paths']
         
         for route_json in routes_json:
@@ -54,7 +54,7 @@ class RoutesProvider():
 
             for instruction_json in instructions_json:
                 instruction = dict()
-                instruction['distance'] = instruction_json['distance']
+                instruction['distance'] = int(instruction_json['distance'])
                 instruction['text'] = instruction_json['text']
                 instructions.append(instruction)
 
