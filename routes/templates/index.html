@@ -71,34 +71,38 @@
                                 </div>
                             </div>
                             <div id="extended_info_{{ forloop.counter0 }}" hidden>
-                                <div class="row mt-3">
-                                    <div class="col-sm-6">
-                                        <h5 class="mr-5">Zonas verdes: 67%</h5>
+                                {% if route.nodes_on_green_areas != None and route.nodes_on_non_green_areas != None %}
+                                    <div class="row mt-3">
+                                        <div class="col-sm-6">
+                                            <h5 class="mr-5">Zonas verdes: {{route.nodes_on_green_areas}}%</h5>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h5>Zonas no verde: {{route.nodes_on_non_green_areas}}%</h5>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <h5>Zonas no verde: 33%</h5>
+                                {% endif %}
+                                {% if route.very_good_air_quality_nodes != None %}
+                                    <div class="row mt-2">
+                                        <div class="col-sm-12">
+                                            <h5>Estado de la calidad del aire:</h5>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-sm-12">
-                                        <h5>Estado de la calidad del aire:</h5>
+                                    <div class="row mt-2 mb-3">
+                                        <img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}">{{route.very_good_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}">{{route.good_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}">{{route.mediocre_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}">{{route.bad_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}">{{route.very_bad_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/grey-pilot.png' %}">{{route.unknown_air_quality_nodes}}%</img>
                                     </div>
-                                </div>
-                                <div class="row mt-2 mb-3">
-                                    <img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}">{{route.very_good_air_quality_nodes}}%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}">{{route.good_air_quality_nodes}}%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}">{{route.mediocre_air_quality_nodes}}%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}">{{route.bad_air_quality_nodes}}%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}">{{route.very_bad_air_quality_nodes}}%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/grey-pilot.png' %}">{{route.unknown_air_quality_nodes}}%</img>
-                                </div>
+                                {% endif %}
                             </div>
                             <div class ="row mb-2 mt-2">
                                 <div class="col-sm-6 text-left">
                                     <button type="button" class="btn btn-secondary">Ruta completada</button>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <a href="#" onclick="moreInfo('{{ forloop.counter0 }}');"><i id="info_button_{{ forloop.counter0 }}" class="glyphicon glyphicon-chevron-down"></i></a>
+                                    <a href="#"><i id="info_button_{{ forloop.counter0 }}" class="glyphicon glyphicon-chevron-down"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +134,7 @@
                     }
 
                     var nMarkers = 0;
-                    var lastRouteShown = 0;
+                    var lastRouteShown = null;
                     var routeMarkers = new Array();
                     var polyline = null;
 
@@ -266,6 +270,14 @@
 
                         if(polyline != null){
                             map.removeLayer(polyline);
+                        }
+
+
+                        moreInfo(n);
+                        if(lastRouteShown == null){
+                            lastRouteShown = 0;
+                        }else{
+                            moreInfo(lastRouteShown);
                         }
 
                         document.getElementById("instructions_" + lastRouteShown).hidden = true;
