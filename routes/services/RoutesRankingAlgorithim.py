@@ -81,10 +81,10 @@ class RoutesRankingAlgorithim():
                 route.ranking_puntuation += route.nodes_on_green_areas*0.5
             else:
                 route.ranking_puntuation += 25
+
+            route.ranking_puntuation = round(route.ranking_puntuation, 1)
         return routes
 
-
-    
 
     def sort_ranking(self, routes):
         def sort_ranking_aux(e):

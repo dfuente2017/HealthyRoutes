@@ -137,35 +137,41 @@ function searchRoutes(){
 
 
 function selectRoute(n){
-    var nodesHTML = document.getElementById("route_nodes_"+n).innerText.replace(/'/g, '"').replace(/None/g, null);
-    var nodesParsed = JSON.parse(nodesHTML);
-
-    if(polyline != null){
-        map.removeLayer(polyline);
+    if(n != lastRouteShown){
+        var nodesHTML = document.getElementById("route_nodes_"+n).innerText.replace(/'/g, '"').replace(/None/g, null);
+        var nodesParsed = JSON.parse(nodesHTML);
+    
+        if(polyline != null){
+            map.removeLayer(polyline);
+        }
+    
+    
+        moreInfo(n);
+        document.getElementById("card_" + n).setAttribute("class", document.getElementById("card_"+n).attributes['class'].textContent.replace("bg-primary", "bg-secondary"));
+        if(lastRouteShown == null){
+            lastRouteShown = 0;
+        }else{
+            moreInfo(lastRouteShown);
+            document.getElementById("card_" + lastRouteShown).setAttribute("class", document.getElementById("card_"+lastRouteShown).attributes['class'].textContent.replace("bg-secondary", "bg-primary"));
+        }
+        
+    
+        document.getElementById("instructions_" + lastRouteShown).hidden = true;
+        lastRouteShown = n;
+    
+        document.getElementById("instructions_" + n).hidden = false;
+    
+        var latlngs = [];
+    
+        for(let i=0;i<nodesParsed.length;i++){
+            latlngs.push([nodesParsed[i].latitude, nodesParsed[i].longitude]);
+        }
+        polyline = L.polyline(latlngs, {color:'#3388ff', weight:5}).addTo(map);
+    
+        map.fitBounds(polyline.getBounds());
     }
-
-
-    moreInfo(n);
-    if(lastRouteShown == null){
-        lastRouteShown = 0;
-    }else{
-        moreInfo(lastRouteShown);
-    }
-
-    document.getElementById("instructions_" + lastRouteShown).hidden = true;
-    lastRouteShown = n;
-
-    document.getElementById("instructions_" + n).hidden = false;
-
-    var latlngs = [];
-
-    for(let i=0;i<nodesParsed.length;i++){
-        latlngs.push([nodesParsed[i].latitude, nodesParsed[i].longitude]);
-    }
-    polyline = L.polyline(latlngs, {color:'#3388ff', weight:5}).addTo(map);
-
-    map.fitBounds(polyline.getBounds());
 }
+
 
 function moreInfo(n){
     if(document.getElementById("info_button_" + n).attributes[1].value == "glyphicon glyphicon-chevron-down"){
@@ -177,11 +183,15 @@ function moreInfo(n){
     }
 }
 
+
 $(document).ready(function() {
     if(document.getElementById("route_nodes_0") != null){
         selectRoute(0);
     }
 });
+
+
+//document.getElementById("card_0").setAttribute("class", document.getElementById("card_0").attributes['class'].textContent.replace("bg-primary", "bg-2934d3"));
 
 /*L.Control.geocoder({
     geocoder: L.Control.Geocoder.nominatim()
