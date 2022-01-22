@@ -13,18 +13,6 @@ function changePassword(){
 	document.getElementById("pwd2-show").hidden = false;
 }
 
-function moreInfo(){
-	if(document.getElementById("info_button").attributes[1].value == "glyphicon glyphicon-chevron-down"){
-		document.getElementById("basic_info").hidden = true;
-		document.getElementById("extended_info").hidden = false;
-		document.getElementById("info_button").attributes[1].value = "glyphicon glyphicon-chevron-up";
-	} else{
-		document.getElementById("basic_info").hidden = false;
-		document.getElementById("extended_info").hidden = true;
-		document.getElementById("info_button").attributes[1].value = "glyphicon glyphicon-chevron-down";
-	}
-}
-
 function like(){
 	if(document.getElementById("like-icon").attributes[1].value == "glyphicon glyphicon-heart-empty"){
 		document.getElementById("like-icon").attributes[1].value = "glyphicon glyphicon-heart";
