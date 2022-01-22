@@ -1,5 +1,4 @@
 import requests
-from .RoutesRankingAlgorithim import RoutesRankingAlgorithim
 from ..models import Route
 
 
@@ -13,16 +12,7 @@ class RoutesProvider():
 
 
     def get_routes(self):
-        rra = RoutesRankingAlgorithim()
-
         routes = self.routes_api_request()
-        routes = self.green_areas_api_request(routes)
-
-        routes = rra.add_air_quality_puntuation(routes)
-        routes = rra.add_surface_quality_puntuation(routes)
-        routes = rra.add_ranking_puntuation(routes)
-        routes = rra.sort_ranking(routes)
-
         return routes
 
 
@@ -62,11 +52,6 @@ class RoutesProvider():
 
             routes.append(route)
 
-        return routes
-
-
-    def green_areas_api_request(self, routes = list()):
-        pass
         return routes
 
 

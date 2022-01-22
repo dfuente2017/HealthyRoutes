@@ -34,7 +34,7 @@ class Route(models.Model):
     very_bad_air_quality_nodes = models.IntegerField(null = True)
     unknown_air_quality_nodes = models.IntegerField(null = True)
     
-    #Percentage of nodes in ecah zone
+    #Percentage of nodes in each zone
     nodes_on_green_areas = models.IntegerField(null = True)
     nodes_on_non_green_areas = models.IntegerField(null = True)
 
