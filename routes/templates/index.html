@@ -85,11 +85,12 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2 mb-3">
-                                    <img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}">36%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}">52%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}">5%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}">4%</img>
-                                    <img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}">2%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}">{{route.very_good_air_quality_nodes}}%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}">{{route.good_air_quality_nodes}}%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}">{{route.mediocre_air_quality_nodes}}%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}">{{route.bad_air_quality_nodes}}%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}">{{route.very_bad_air_quality_nodes}}%</img>
+                                    <img class="ml-5 pilots" src="{% static 'img/grey-pilot.png' %}">{{route.unknown_air_quality_nodes}}%</img>
                                 </div>
                             </div>
                             <div class ="row mb-2 mt-2">
@@ -267,10 +268,6 @@
                             map.removeLayer(polyline);
                         }
 
-                        /*for(let i=0;i<document.getElementById("instruction_container").children.length-1;i++){
-                            document.getElementById("instructions_" + i).hidden = true;
-                        }*/
-
                         document.getElementById("instructions_" + lastRouteShown).hidden = true;
                         lastRouteShown = n;
 
@@ -279,7 +276,7 @@
                         var latlngs = [];
 
                         for(let i=0;i<nodesParsed.length;i++){
-                            latlngs.push([nodesParsed[i].longitude, nodesParsed[i].latitude]);
+                            latlngs.push([nodesParsed[i].latitude, nodesParsed[i].longitude]);
                         }
                         polyline = L.polyline(latlngs, {color:'#3388ff', weight:5}).addTo(map);
 

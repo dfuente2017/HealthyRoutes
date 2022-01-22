@@ -1,4 +1,5 @@
 from djongo import models
+from pkg_resources import UnknownExtra
 
 # Create your models here.
 
@@ -24,4 +25,17 @@ class Route(models.Model):
     time = models.IntegerField(null= True)
     instructions = models.ArrayField(model_container = Instruction, null = True)
     nodes = models.ArrayField(model_container = Node, null= True)
+
+    #Percentage of nodes with each air quality
+    very_good_air_quality_nodes = models.IntegerField(null = True)
+    good_air_quality_nodes = models.IntegerField(null = True)
+    mediocre_air_quality_nodes = models.IntegerField(null = True)
+    bad_air_quality_nodes = models.IntegerField(null = True)
+    very_bad_air_quality_nodes = models.IntegerField(null = True)
+    unknown_air_quality_nodes = models.IntegerField(null = True)
+    
+    #Percentage of nodes in ecah zone
+    nodes_on_green_areas = models.IntegerField(null = True)
+    nodes_on_non_green_areas = models.IntegerField(null = True)
+
     ranking_puntuation = models.DecimalField(max_digits=18, decimal_places=15, null = True)

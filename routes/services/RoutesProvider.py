@@ -40,8 +40,8 @@ class RoutesProvider():
 
             for node_json in nodes_json:
                 node = dict()
-                node['latitude'] = node_json[0]
-                node['longitude'] = node_json[1]
+                node['longitude'] = node_json[0]
+                node['latitude'] = node_json[1]
                 node['air_quality'] = None
                 node['surface_quality'] = None
 

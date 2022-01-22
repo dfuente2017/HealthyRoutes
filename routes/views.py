@@ -10,7 +10,6 @@ from rest_framework.response import Response as ApiResponse
 
 def index(request):
     if request.method == 'POST':
-        print('POST')
         init_lat = request.POST['initLatitude']
         init_long = request.POST['initLongitude']
         end_lat = request.POST['endLatitude']
