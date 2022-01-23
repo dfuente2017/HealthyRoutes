@@ -2,7 +2,6 @@ from djongo import models
 
 # Create your models here.
 
-
 class Node(models.Model):
     id = models.ObjectIdField()
     latitude = models.DecimalField(max_digits=18, decimal_places=15, null= True)
@@ -13,7 +12,7 @@ class Node(models.Model):
 
 class Instruction(models.Model):
     id = models.ObjectIdField()
-    distance = models.DecimalField(max_digits=18, decimal_places=15, null= True)        #Cambiar a number
+    distance = models.DecimalField(max_digits=5, decimal_places=2, null= True)        #Cambiar a number
     text = models.CharField(max_length=50, null = True)
 
 
@@ -21,7 +20,7 @@ class Route(models.Model):
     _id = models.ObjectIdField(primary_key=True)
     user = models.EmailField(max_length = 60, null = False)
     date_saved = models.DateTimeField(auto_now = True, null = False)
-    distance = models.DecimalField(max_digits=18, decimal_places=15, null= False)
+    distance = models.DecimalField(max_digits=5, decimal_places=2, null= False)
     time = models.IntegerField(null= False)
     instructions = models.ArrayField(model_container = Instruction, null = True)
     nodes = models.ArrayField(model_container = Node, null= False)
@@ -38,4 +37,4 @@ class Route(models.Model):
     nodes_on_green_areas = models.IntegerField(null = True)
     nodes_on_non_green_areas = models.IntegerField(null = True)
 
-    ranking_puntuation = models.DecimalField(max_digits=18, decimal_places=15, null = False)
+    ranking_puntuation = models.DecimalField(max_digits=4, decimal_places=1, null = False)
