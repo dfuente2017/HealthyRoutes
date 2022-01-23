@@ -84,6 +84,10 @@ li a:hover:not(.active) {
 	color: #FFFFFF;
 }
 
+.h-70{
+	height:70%;
+}
+
 .pestañas-login-1{
 	border-radius: 0px 0px 15px 0px;
 }

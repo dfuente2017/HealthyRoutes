@@ -124,8 +124,8 @@
                 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
                 <script src="{% static 'map.js' %}"></script>
             </div>
-            <div id="instructions_container" class = "col-sm-2">
-                <div class="card bg-primary text-white col-sm-12 mt-3 mb-3">
+            <div id="instructions_container" class = "col-sm-2 overflow-auto h-70 mt-3">
+                <div class="card bg-primary text-white col-sm-12 mb-3">
                     <h1>Indicaciones</h1>
                 </div>
                 {% for route in routes %}
