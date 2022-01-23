@@ -1,5 +1,4 @@
 from djongo import models
-from pkg_resources import UnknownExtra
 
 # Create your models here.
 
@@ -19,23 +18,24 @@ class Instruction(models.Model):
 
 
 class Route(models.Model):
-    id = models.IntegerField(primary_key = True)
-    user = models.EmailField(max_length = 60, null = True)
-    distance = models.DecimalField(max_digits=18, decimal_places=15, null= True)
-    time = models.IntegerField(null= True)
+    id = models.ObjectIdField()
+    user = models.EmailField(max_length = 60, null = False)
+    date_saved = models.DateTimeField(auto_now = True, null = False)
+    distance = models.DecimalField(max_digits=18, decimal_places=15, null= False)
+    time = models.IntegerField(null= False)
     instructions = models.ArrayField(model_container = Instruction, null = True)
-    nodes = models.ArrayField(model_container = Node, null= True)
+    nodes = models.ArrayField(model_container = Node, null= False)
 
     #Percentage of nodes with each air quality
-    very_good_air_quality_nodes = models.IntegerField(null = True)
-    good_air_quality_nodes = models.IntegerField(null = True)
-    mediocre_air_quality_nodes = models.IntegerField(null = True)
-    bad_air_quality_nodes = models.IntegerField(null = True)
-    very_bad_air_quality_nodes = models.IntegerField(null = True)
-    unknown_air_quality_nodes = models.IntegerField(null = True)
+    very_good_air_quality_nodes = models.IntegerField(null = False)
+    good_air_quality_nodes = models.IntegerField(null = False)
+    mediocre_air_quality_nodes = models.IntegerField(null = False)
+    bad_air_quality_nodes = models.IntegerField(null = False)
+    very_bad_air_quality_nodes = models.IntegerField(null = False)
+    unknown_air_quality_nodes = models.IntegerField(null = False)
     
     #Percentage of nodes in each zone
     nodes_on_green_areas = models.IntegerField(null = True)
     nodes_on_non_green_areas = models.IntegerField(null = True)
 
-    ranking_puntuation = models.DecimalField(max_digits=18, decimal_places=15, null = True)
+    ranking_puntuation = models.DecimalField(max_digits=18, decimal_places=15, null = False)

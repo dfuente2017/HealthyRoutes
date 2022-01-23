@@ -13,11 +13,13 @@ function changePassword(){
 	document.getElementById("pwd2-show").hidden = false;
 }
 
-function like(){
-	if(document.getElementById("like-icon").attributes[1].value == "glyphicon glyphicon-heart-empty"){
-		document.getElementById("like-icon").attributes[1].value = "glyphicon glyphicon-heart";
+function like(n){
+	if(document.getElementById("like-icon-" + n).attributes[1].value == "glyphicon glyphicon-heart-empty"){
+		document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart");
+		var routeId = saveRoute(n);
 	}else{
-		document.getElementById("like-icon").attributes[1].value = "glyphicon glyphicon-heart-empty";
+		document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart-empty");
+		removeRoute(routeId);
 	}
 }
 
@@ -81,4 +83,59 @@ function showRouteVariation(){
 	}else{
 		document.getElementById("routes_variation_button").setAttribute("Class","glyphicon glyphicon-chevron-down");
 	}
+}
+
+function saveRoute(n){
+	$.ajax({
+		url: 'api/post/route',
+		type: 'POST',
+		data: {
+			csrfmiddlewaretoken: document.getElementById("csrfmiddlewaretoken").innerText,
+			distance: document.getElementById("route-distance-"+n).innerText,
+			time: document.getElementById("route-time-"+n).innerText,
+			nodes: document.getElementById("route_nodes_"+n).innerText,
+			veryGoodAirQualityNodes: document.getElementById("route-very-good-air-quality-nodes-"+n).innerText,
+			goodAirQualityNodes: document.getElementById("route-good-air-quality-nodes-"+n).innerText,
+			mediocreAirQualityNodes: document.getElementById("route-mediocre-air-quality-nodes-"+n).innerText,
+			badAirQualityNodes: document.getElementById("route-bad-air-quality-nodes-"+n).innerText,
+			veryBadAirQualityNodes: document.getElementById("route-very-bad-air-quality-nodes-"+n).innerText,
+			unknownAirQualityNodes: document.getElementById("route-unknown-air-quality-nodes-"+n).innerText,
+			rankingPuntuation: document.getElementById("route-ranking-puntuation-"+n).innerText
+		},
+		success: function(response){
+			alert(response['message']);
+			document.getElementById("route-user-0").innerText = response['route_user']
+			document.getElementById("route-date-saved-0").innerText = response['route_date_saved']
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart-empty");		
+			if(errorThrown === "Unauthorized"){
+				alert("Para poder guardar rutas necesitas iniciar sesion");
+			}
+			else if(errorThrown === "Bad Request"){
+				alert("La ruta no pudo guardarse correctamente");
+			}
+			else{
+				alert(textStatus + ':' + errorThrown);
+			}
+		}
+	});
+}
+
+function removeRoute(n){
+	$.ajax({
+		url: 'api/delete/route',
+		type: 'DELETE',
+		data: {
+			routeId: null
+		},
+		success: function(response){
+			/*for(let key in response){
+				$("#town").append('<option value=' + key +'>' + response[key] + '</option>')
+			}*/
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			alert(textStatus + ':' + errorThrown)
+		}
+	});
 }
