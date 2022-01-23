@@ -16,10 +16,10 @@ function changePassword(){
 function like(n){
 	if(document.getElementById("like-icon-" + n).attributes[1].value == "glyphicon glyphicon-heart-empty"){
 		document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart");
-		var routeId = saveRoute(n);
+		saveRoute(n);
 	}else{
 		document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart-empty");
-		removeRoute(routeId);
+		removeRoute(n);
 	}
 }
 
@@ -87,10 +87,11 @@ function showRouteVariation(){
 
 function saveRoute(n){
 	$.ajax({
-		url: 'api/post/route',
+		url: 'api/route',
 		type: 'POST',
 		data: {
 			csrfmiddlewaretoken: document.getElementById("csrfmiddlewaretoken").innerText,
+			type: "POST",
 			distance: document.getElementById("route-distance-"+n).innerText,
 			time: document.getElementById("route-time-"+n).innerText,
 			nodes: document.getElementById("route_nodes_"+n).innerText,
@@ -104,8 +105,7 @@ function saveRoute(n){
 		},
 		success: function(response){
 			alert(response['message']);
-			document.getElementById("route-user-0").innerText = response['route_user']
-			document.getElementById("route-date-saved-0").innerText = response['route_date_saved']
+			document.getElementById("route-date-saved-"+n).innerText = response['route_date_saved']
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart-empty");		
@@ -124,18 +124,27 @@ function saveRoute(n){
 
 function removeRoute(n){
 	$.ajax({
-		url: 'api/delete/route',
-		type: 'DELETE',
+		url: 'api/route',
+		type: 'POST',
 		data: {
-			routeId: null
+			csrfmiddlewaretoken: document.getElementById("csrfmiddlewaretoken").innerText,
+			type: "DELETE",
+			routeDateSaved: document.getElementById("route-date-saved-"+n).innerText
 		},
 		success: function(response){
-			/*for(let key in response){
-				$("#town").append('<option value=' + key +'>' + response[key] + '</option>')
-			}*/
+			alert(response['message']);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
-			alert(textStatus + ':' + errorThrown)
+			document.getElementById("like-icon-" + n).setAttribute("class","glyphicon glyphicon-heart");
+			if(errorThrown === "Unauthorized"){
+				alert("Para poder guardar rutas necesitas iniciar sesion");
+			}
+			else if(errorThrown === "Bad Request"){
+				alert("La ruta no pudo eliminarse correctamente");
+			}
+			else{
+				alert(textStatus + ':' + errorThrown);
+			}
 		}
 	});
 }

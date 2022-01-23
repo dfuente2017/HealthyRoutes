@@ -18,7 +18,7 @@ class Instruction(models.Model):
 
 
 class Route(models.Model):
-    id = models.ObjectIdField()
+    _id = models.ObjectIdField(primary_key=True)
     user = models.EmailField(max_length = 60, null = False)
     date_saved = models.DateTimeField(auto_now = True, null = False)
     distance = models.DecimalField(max_digits=18, decimal_places=15, null= False)

@@ -50,7 +50,8 @@
                     <h1>Ranking</h1>
                     <div id="csrfmiddlewaretoken" hidden>{{csrf_token}}</div>
                     {% for route in routes %}
-                        <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mt-3" onclick="selectRoute('{{ forloop.counter0 }}')";>                            
+                        <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mt-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
+                                                       
                             <div id="route-distance-{{ forloop.counter0 }}" hidden>{{route.distance}}</div>
                             <div id="route-time-{{ forloop.counter0 }}" hidden>{{route.time}}</div>
                             <div id="route_nodes_{{ forloop.counter0 }}" hidden>{{route.nodes}}</div>
@@ -61,8 +62,6 @@
                             <div id="route-very-bad-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.very_bad_air_quality_nodes}}</div>
                             <div id="route-unknown-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.unknown_air_quality_nodes}}</div>
                             <div id="route-ranking-puntuation-{{ forloop.counter0 }}" hidden>{{route.ranking_puntuation}}</div>
-
-                            <div id="route-user-{{ forloop.counter0 }}" hidden></div>
                             <div id="route-date-saved-{{ forloop.counter0 }}" hidden></div>
 
                             <div class="row">

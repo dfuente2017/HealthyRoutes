@@ -15,6 +15,7 @@ from .models import Route
 from django.contrib.auth.models import auth
 
 import json
+import datetime
 
 
 # Create your views here.
@@ -60,39 +61,47 @@ def check_routes(user, distance, time, nodes, very_good_air_quality_nodes, good_
         raise Exception()
 
 
-@api_view(['POST'])
-def api_post_route(request):
-    response = None
-    if request.user.is_authenticated:
-        distance = float(request.POST.get('distance',None))
-        time = int(request.POST.get('time',None))
-        nodes = nodes_parser(request.POST.get('nodes',None))      
-        very_good_air_quality_nodes = int(request.POST.get('veryGoodAirQualityNodes',None))
-        good_air_quality_nodes = int(request.POST.get('goodAirQualityNodes',None))
-        mediocre_air_quality_nodes = int(request.POST.get('mediocreAirQualityNodes',None))
-        bad_air_quality_nodes = int(request.POST.get('badAirQualityNodes',None))
-        very_bad_air_quality_nodes= int(request.POST.get('veryBadAirQualityNodes',None))
-        unknown_air_quality_nodes = int(request.POST.get('unknownAirQualityNodes',None))
-        ranking_puntuation = float(request.POST.get('rankingPuntuation',None))
+def api_route_post(request):
+    distance = float(request.POST.get('distance',None))
+    time = int(request.POST.get('time',None))
+    nodes = nodes_parser(request.POST.get('nodes',None))      
+    very_good_air_quality_nodes = int(request.POST.get('veryGoodAirQualityNodes',None))
+    good_air_quality_nodes = int(request.POST.get('goodAirQualityNodes',None))
+    mediocre_air_quality_nodes = int(request.POST.get('mediocreAirQualityNodes',None))
+    bad_air_quality_nodes = int(request.POST.get('badAirQualityNodes',None))
+    very_bad_air_quality_nodes= int(request.POST.get('veryBadAirQualityNodes',None))
+    unknown_air_quality_nodes = int(request.POST.get('unknownAirQualityNodes',None))
+    ranking_puntuation = float(request.POST.get('rankingPuntuation',None))
 
+    check_routes(user=request.user.email, distance = distance, time = time, nodes = nodes, very_good_air_quality_nodes = very_good_air_quality_nodes, good_air_quality_nodes = good_air_quality_nodes, mediocre_air_quality_nodes = mediocre_air_quality_nodes, bad_air_quality_nodes = bad_air_quality_nodes, very_bad_air_quality_nodes = very_bad_air_quality_nodes, unknown_air_quality_nodes = unknown_air_quality_nodes, ranking_puntuation = ranking_puntuation)
+    route = Route.objects.create(user=request.user.email, distance = distance, time = time, nodes = nodes, very_good_air_quality_nodes = very_good_air_quality_nodes, good_air_quality_nodes = good_air_quality_nodes, mediocre_air_quality_nodes = mediocre_air_quality_nodes, bad_air_quality_nodes = bad_air_quality_nodes, very_bad_air_quality_nodes = very_bad_air_quality_nodes, unknown_air_quality_nodes = unknown_air_quality_nodes, ranking_puntuation = ranking_puntuation)
+    response = ApiResponse(data = {'message':"La ruta se ha guardado correctamente", 'route_date_saved':route.date_saved},status = status.HTTP_200_OK)
+
+    return response
+
+
+def api_route_delete(request):
+    user = request.user.email
+    route_date_saved = datetime.datetime.strptime(request.POST.get('routeDateSaved', None).replace('T',' ').replace('Z',''), '%Y-%m-%d %H:%M:%S.%f')
+
+    route = Route.objects.get(user = user, date_saved = route_date_saved)
+    route.delete()
+
+    return ApiResponse(data = {'message':"La ruta ya no esta guardada"}, status = status.HTTP_200_OK)
+
+
+@api_view(['POST']) # And DELETE (because of the problem that we can pass data to the ajax request)
+def api_route(request):
+    if request.user.is_authenticated:
         try:
-            check_routes(user=request.user.email, distance = distance, time = time, nodes = nodes, very_good_air_quality_nodes = very_good_air_quality_nodes, good_air_quality_nodes = good_air_quality_nodes, mediocre_air_quality_nodes = mediocre_air_quality_nodes, bad_air_quality_nodes = bad_air_quality_nodes, very_bad_air_quality_nodes = very_bad_air_quality_nodes, unknown_air_quality_nodes = unknown_air_quality_nodes, ranking_puntuation = ranking_puntuation)
-            route = Route.objects.create(user=request.user.email, distance = distance, time = time, nodes = nodes, very_good_air_quality_nodes = very_good_air_quality_nodes, good_air_quality_nodes = good_air_quality_nodes, mediocre_air_quality_nodes = mediocre_air_quality_nodes, bad_air_quality_nodes = bad_air_quality_nodes, very_bad_air_quality_nodes = very_bad_air_quality_nodes, unknown_air_quality_nodes = unknown_air_quality_nodes, ranking_puntuation = ranking_puntuation)
-            response = ApiResponse(data = {'message':"La ruta se ha guardado correctamente", 'route_user':route.user, 'route_date_saved':route.date_saved},status = status.HTTP_200_OK)
-        except:
+            if request.POST['type'] == 'POST':
+                response = api_route_post(request)
+            elif request.POST['type'] == 'DELETE':
+                response = api_route_delete(request)
+        except Exception as e:
+            print(str(e))
             response = ApiResponse(status = status.HTTP_400_BAD_REQUEST)
     else:
         response = ApiResponse(status = status.HTTP_401_UNAUTHORIZED)
     
     return response
-
-@api_view(['DELETE'])
-def api_delete_route(request):
-    pass
-    return ApiResponse(None)
-
-"""@api_view(['GET'])
-def api_get_air_stations(request):
-    air_stations = AirStation.objects.filter(town_id = request.GET.get('town_id', 79))
-    api_objects = AirStationSerializer(air_stations, many=True)
-    return ApiResponse(api_objects.data)"""

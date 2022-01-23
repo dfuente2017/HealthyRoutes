@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from users.views import login, register, logout, profile
-from routes.views import index, api_post_route, api_delete_route
+from routes.views import index, api_route
 from air_stations.views import upload_air_stations, get_provinces, get_towns, api_get_air_stations
 
 urlpatterns = [
@@ -33,8 +33,7 @@ urlpatterns = [
     path('get/provinces', get_provinces),
     path('get/towns', get_towns),
     path('api/air_stations', api_get_air_stations),
-    path('api/post/route', api_post_route),
-    path('api/delete/route', api_delete_route),
+    path('api/route', api_route),
 ]
 
 if settings.DEBUG:
