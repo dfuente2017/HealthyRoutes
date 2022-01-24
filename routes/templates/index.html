@@ -5,7 +5,7 @@
 
 <form action="" method='POST'>
 {% csrf_token %}
-    <div class = "container-fluid h-100">
+    <div class = "container-fluid h-75 overflow-fixed">
         <div class = "row m-3 h-100">
             <div class="col-sm-2">
                 <div class = "row">
@@ -46,11 +46,13 @@
                         </div>
                     </div>
                 </div>
-                <div id = "route-ranking-container" class = "row">
+                <div class="row">
                     <h1>Ranking</h1>
+                </div>
+                <div id = "route-ranking-container" class = "row overflow-auto h-70">
                     <div id="csrfmiddlewaretoken" hidden>{{csrf_token}}</div>
                     {% for route in routes %}
-                        <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mt-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
+                        <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mb-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
                                                        
                             <div id="route-distance-{{ forloop.counter0 }}" hidden>{{route.distance}}</div>
                             <div id="route-time-{{ forloop.counter0 }}" hidden>{{route.time}}</div>
@@ -124,7 +126,7 @@
                 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
                 <script src="{% static 'map.js' %}"></script>
             </div>
-            <div id="instructions_container" class = "col-sm-2 overflow-auto h-70 mt-3">
+            <div id="instructions_container" class = "col-sm-2 overflow-auto h-90 mt-3">
                 <div class="card bg-primary text-white col-sm-12 mb-3">
                     <h1>Indicaciones</h1>
                 </div>
