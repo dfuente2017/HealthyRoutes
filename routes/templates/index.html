@@ -7,7 +7,7 @@
 {% csrf_token %}
     <div class = "container-fluid h-75 overflow-fixed">
         <div class = "row m-3 h-100">
-            <div class="col-sm-2">
+            <div class="col-sm-2 overflow-auto">
                 <div class = "row">
                     <div class="card bg-primary text-white col-sm-12 mt-3">
                         <input id='initLatitude' name='initLatitude' type='value' hidden></input>
@@ -49,7 +49,7 @@
                 <div class="row">
                     <h1>Ranking</h1>
                 </div>
-                <div id = "route-ranking-container" class = "row overflow-auto hide-scrollbar h-70">
+                <div id = "route-ranking-container" class = "row overflow-auto hide-scrollbar" style="height: 500px;">
                     <div id="csrfmiddlewaretoken" hidden>{{csrf_token}}</div>
                     {% for route in routes %}
                         <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mb-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
@@ -121,7 +121,7 @@
                 </div>
             </div>
             <div class = "col-sm-8 mt-3">
-                <div id="map" class="map" style="height: 91.5%; width: 100%;"></div>
+                <div id="map" class="map" style="height: 650px; width: 100%;"></div> <!---->
                 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
                 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
                 <script src="{% static 'map.js' %}"></script>
