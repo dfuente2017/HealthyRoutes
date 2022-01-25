@@ -49,7 +49,7 @@
                 <div class="row">
                     <h1>Ranking</h1>
                 </div>
-                <div id = "route-ranking-container" class = "row overflow-auto h-70">
+                <div id = "route-ranking-container" class = "row overflow-auto hide-scrollbar h-70">
                     <div id="csrfmiddlewaretoken" hidden>{{csrf_token}}</div>
                     {% for route in routes %}
                         <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mb-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
@@ -126,7 +126,7 @@
                 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
                 <script src="{% static 'map.js' %}"></script>
             </div>
-            <div id="instructions_container" class = "col-sm-2 overflow-auto h-90 mt-3">
+            <div id="instructions_container" class = "col-sm-2 overflow-auto hide-scrollbar h-90 mt-3">
                 <div class="card bg-primary text-white col-sm-12 mb-3">
                     <h1>Indicaciones</h1>
                 </div>

@@ -92,6 +92,10 @@ li a:hover:not(.active) {
 	height:90%;
 }
 
+.hide-scrollbar{
+	scrollbar-width: none;
+}
+
 .pestañas-login-1{
 	border-radius: 0px 0px 15px 0px;
 }
