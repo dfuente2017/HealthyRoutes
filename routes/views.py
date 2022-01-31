@@ -45,6 +45,13 @@ def index(request):
         return render(request, "index.html")
 
 
+def saved_routes(request):
+    if request.user.is_authenticated:
+        return render(request, "saved-routes.html", {'routes': Route.objects.filter(user = request.user.email)})
+    else:
+        return render(request, "login.html")
+
+
 def nodes_parser(nodes):
     nodes = list(json.loads(nodes.replace("'",'"').replace('None', 'null')))
     i = 1

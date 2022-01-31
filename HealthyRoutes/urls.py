@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from users.views import login, register, logout, profile
-from routes.views import index, api_route
+from routes.views import index, saved_routes, api_route
 from air_stations.views import upload_air_stations, get_provinces, get_towns, api_get_air_stations
 
 urlpatterns = [
@@ -34,6 +34,7 @@ urlpatterns = [
     path('get/towns', get_towns),
     path('api/air_stations', api_get_air_stations),
     path('api/route', api_route),
+    path('saved-routes/', saved_routes)
 ]
 
 if settings.DEBUG:

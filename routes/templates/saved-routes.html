@@ -1,0 +1,83 @@
+{% extends "main.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container">
+	<div class="row">
+		<div class="card bg-primary text-white col-sm-8 mt-5 mb-5 mx-auto">
+			<div class="row h-15">
+				<h2 class="mt-3 ml-3">Rutas Completadas</h2>
+			</div>
+			<div class="text-center">
+				<label>Ordenar por:</label>
+				<label><a href="#">fecha</a></label>
+				<label>-</label>
+				<label><a href="#">puntuacion</a></label>
+				<label>-</label>
+				<label><a href="#">distancia</a></label>
+				<label>-</label>
+				<label><a href="#">puntuación del usuario</a></label>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					{% for route in routes %}
+						<div class="card p-3 m-3 bg-secondary h-50">
+							<div class="row">
+								<div class="col-sm-7">
+									<img class=" h-50 w-100" src="img/map.jpg" width="100%"></img>
+								</div>
+								<div class="col-sm-5">
+									<div class="row">
+										<div class="col-sm-6">
+											<h2>{{route.ranking_puntuation}} puntos</h2>
+										</div>
+										<div class="col-sm-6">
+											<div class="row">
+												<h4>{{route.distance}} km</h2>
+											</div>
+											<div class="row">
+												<h4>{{route.time}} mins</h2>
+											</div>
+										</div>
+									</div>
+									{% if route.nodes_on_green_areas != None and route.nodes_on_non_green_areas != None %}
+										<div class="row mt-5">
+											<div class="col-sm-6">
+												<h5 class="mr-5">Zonas verdes: {{route.nodes_on_green_areas}}%</h5>
+											</div>
+											<div class="col-sm-6">
+												<h5>Zonas no verde: {{route.nodes_on_non_green_areas}}%</h5>
+											</div>
+										</div>
+									{% endif %}
+									<div class="row mt-4">
+										<div class="col-sm-12">
+											<h5>Estado de la calidad del aire:</h5>
+										</div>
+									</div>
+									<div class="row">
+										<img class="pilots ml-4" src="{% static 'img/blue-pilot.png' %}">{{route.very_good_air_quality_nodes}}%</img>
+										<img class="pilots ml-4" src="{% static 'img/green-pilot.png' %}">{{route.good_air_quality_nodes}}%</img>
+										<img class="pilots ml-4" src="{% static 'img/yellow-pilot.png' %}">{{route.mediocre_air_quality_nodes}}%</img>
+										<img class="pilots ml-4" src="{% static 'img/orange-pilot.png' %}">{{route.bad_air_quality_nodes}}%</img>
+										<img class="pilots ml-4" src="{% static 'img/red-pilot.png' %}">{{route.very_bad_air_quality_nodes}}%</img>
+										<img class="pilots ml-4" src="{% static 'img/grey-pilot.png' %}">{{route.unknown_air_quality_nodes}}%</img>
+									</div>
+									<div class="row mt-5">
+										<div class="col-sm-12">
+											Fecha
+										</div>
+									</div>
+								</div>
+							</div>						
+						</div>
+						<!--<div class="text-center mt-4">
+							<a href="#">Cargar mas</a>
+						</div>-->
+					{% endfor %}
+				<div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
