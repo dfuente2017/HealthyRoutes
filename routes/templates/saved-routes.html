@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load static %}
+
 <div class="container">
 	<div class="row">
 		<div class="card bg-primary text-white col-sm-8 mt-5 mb-5 mx-auto" style="height: 650px;" >
@@ -31,13 +32,10 @@
 						<div class="card p-3 m-3 bg-secondary">
 							<div class="row">
 								<div class="col-sm-7">
-									<div id="mymap" style="height: 150px; width: 100%;" ></div>
-									<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-                					<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+									<div id="mymap-{{ forloop.counter0 }}" style="height: 150px; width: 100%;"></div>
+									<script src="{% static 'saved-routes-map.js' %}"></script>
 									<script>
-										const tilesProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-										var mymap = L.map("mymap").setView([43.64701, -79.39425], 3);
-										L.tileLayer(tilesProvider).addTo(mymap);
+										createMap("{{ forloop.counter0 }}");
 									</script>
 								</div>
 								<div class="col-sm-5">
@@ -94,7 +92,9 @@
 							<a href="#">Cargar mas</a>
 						</div>-->
 					{% endfor %}
+					
 				<div>
+					
 			</div>
 		</div>
 	</div>
