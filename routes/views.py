@@ -47,7 +47,20 @@ def index(request):
 
 def saved_routes(request):
     if request.user.is_authenticated:
-        return render(request, "saved-routes.html", {'routes': Route.objects.filter(user = request.user.email)})
+        routes = None
+        if request.method == 'POST':
+            order_by_dict = {   
+                'date-asc': Route.objects.filter(user = request.user.email).order_by('date_saved'),
+                'date-desc': Route.objects.filter(user = request.user.email).order_by('date_saved').reverse(),
+                'points': Route.objects.filter(user = request.user.email).order_by('ranking_puntuation').reverse(), 
+                'distance': Route.objects.filter(user = request.user.email).order_by('distance').reverse(),
+                'default': Route.objects.filter(user = request.user.email)
+            }
+            
+            routes = order_by_dict[request.POST.get('order-by','default')]
+        else:
+            routes = Route.objects.filter(user = request.user.email)
+        return render(request, "saved-routes.html", {'routes': routes})
     else:
         return render(request, "login.html")
 

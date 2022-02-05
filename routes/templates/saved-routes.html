@@ -4,27 +4,31 @@
 {% load static %}
 <div class="container">
 	<div class="row">
-		<div class="card bg-primary text-white col-sm-8 mt-5 mb-5 mx-auto">
+		<div class="card bg-primary text-white col-sm-8 mt-5 mb-5 mx-auto" style="height: 650px;" >
 			<div class="row h-15">
 				<h2 class="mt-3 ml-3">Rutas Completadas</h2>
 			</div>
 			<div class="text-center">
 				<label>Ordenar por:</label>
-				<label><a href="#">fecha</a></label>
+				<label><a href="#" onclick="orderBy('date-desc')">fecha(reciente)</a></label>
 				<label>-</label>
-				<label><a href="#">puntuacion</a></label>
+				<label><a href="#" onclick="orderBy('date-asc')">fecha(antiguo)</a></label>
 				<label>-</label>
-				<label><a href="#">distancia</a></label>
+				<label><a href="#" onclick="orderBy('points')">puntuacion</a></label>
 				<label>-</label>
-				<label><a href="#">puntuación del usuario</a></label>
+				<label><a href="#" onclick="orderBy('distance')">distancia</a></label>
+				<form id="order-by-form" action="" method='POST'>
+					{% csrf_token %}
+					<input id='order-by' name='order-by' type='value' hidden></input>
+				</form>
 			</div>
-			<div class="row">
+			<div class="row overflow-auto">
 				<div class="col-sm-12">
 					{% for route in routes %}
-						<div class="card p-3 m-3 bg-secondary h-50">
+						<div class="card p-3 m-3 bg-secondary">
 							<div class="row">
 								<div class="col-sm-7">
-									<img class=" h-50 w-100" src="img/map.jpg" width="100%"></img>
+									<img src="img/map.jpg" style="height: 150px; width: 100%;" ></img>
 								</div>
 								<div class="col-sm-5">
 									<div class="row">
@@ -65,7 +69,7 @@
 									</div>
 									<div class="row mt-5">
 										<div class="col-sm-12">
-											Fecha
+											<h5>Fecha: {{route.date_saved}}</h5>
 										</div>
 									</div>
 								</div>
@@ -80,4 +84,26 @@
 		</div>
 	</div>
 </div>
+<script>
+	function orderBy(param){
+		console.log("Paso")
+		switch(param){
+			case "date-asc":
+				document.getElementById("order-by").value = "date-asc";
+				break;
+			case "date-desc":
+				document.getElementById("order-by").value = "date-desc";
+				break;
+			case "points":
+				document.getElementById("order-by").value = "points";
+				break;
+			case "distance":
+				document.getElementById("order-by").value = "distance";
+				break;
+			default:
+				document.getElementById("order-by").value = "date";
+		}
+		document.forms["order-by-form"].submit();
+	}
+</script>
 {% endblock %}
