@@ -49,15 +49,21 @@ def saved_routes(request):
     if request.user.is_authenticated:
         routes = None
         if request.method == 'POST':
-            order_by_dict = {   
-                'date-asc': Route.objects.filter(user = request.user.email).order_by('date_saved'),
-                'date-desc': Route.objects.filter(user = request.user.email).order_by('date_saved').reverse(),
-                'points': Route.objects.filter(user = request.user.email).order_by('ranking_puntuation').reverse(), 
-                'distance': Route.objects.filter(user = request.user.email).order_by('distance').reverse(),
-                'default': Route.objects.filter(user = request.user.email)
-            }
-            
-            routes = order_by_dict[request.POST.get('order-by','default')]
+            if request.POST['operation'] == 'order-by':
+                order_by_dict = {   
+                    'date-asc': Route.objects.filter(user = request.user.email).order_by('date_saved'),
+                    'date-desc': Route.objects.filter(user = request.user.email).order_by('date_saved').reverse(),
+                    'points': Route.objects.filter(user = request.user.email).order_by('ranking_puntuation').reverse(), 
+                    'distance': Route.objects.filter(user = request.user.email).order_by('distance').reverse(),
+                    'default': Route.objects.filter(user = request.user.email)
+                }
+
+                routes = order_by_dict[request.POST.get('order-by','default')]
+            else:
+                user = request.POST['user']
+                date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
+                Route.objects.filter(user = user, date_saved = date_saved).delete()
+                routes = Route.objects.filter(user = request.user.email)
         else:
             routes = Route.objects.filter(user = request.user.email)
         return render(request, "saved-routes.html", {'routes': routes})

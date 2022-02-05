@@ -6,9 +6,9 @@
 	<div class="row">
 		<div class="card bg-primary text-white col-sm-8 mt-5 mb-5 mx-auto" style="height: 650px;" >
 			<div class="row h-15">
-				<h2 class="mt-3 ml-3">Rutas Completadas</h2>
+				<h1 class="mt-3 ml-5 h1">Rutas Guardadas</h1>
 			</div>
-			<div class="text-center">
+			<div class="text-center h4">
 				<label>Ordenar por:</label>
 				<label><a href="#" onclick="orderBy('date-desc')">fecha(reciente)</a></label>
 				<label>-</label>
@@ -17,12 +17,15 @@
 				<label><a href="#" onclick="orderBy('points')">puntuacion</a></label>
 				<label>-</label>
 				<label><a href="#" onclick="orderBy('distance')">distancia</a></label>
-				<form id="order-by-form" action="" method='POST'>
+				<form id="saved-routes-form" action="" method='POST'>
 					{% csrf_token %}
-					<input id='order-by' name='order-by' type='value' hidden></input>
+					<input id="operation" name="operation" type="value" hidden></input>
+					<input id="order-by" name="order-by" type="value" hidden></input>
+					<input id="user" name="user" type="value" hidden></input>
+					<input id="date-saved" name="date-saved" type="value" hidden></input>
 				</form>
 			</div>
-			<div class="row overflow-auto">
+			<div class="row overflow-auto hide-scrollbar">
 				<div class="col-sm-12">
 					{% for route in routes %}
 						<div class="card p-3 m-3 bg-secondary">
@@ -32,15 +35,20 @@
 								</div>
 								<div class="col-sm-5">
 									<div class="row">
-										<div class="col-sm-6">
-											<h2>{{route.ranking_puntuation}} puntos</h2>
+										<div class="col-sm-5">
+											<h3>{{route.ranking_puntuation}} puntos</h3>
 										</div>
-										<div class="col-sm-6">
+										<div class="col-sm-5">
 											<div class="row">
 												<h4>{{route.distance}} km</h2>
 											</div>
 											<div class="row">
 												<h4>{{route.time}} mins</h2>
+											</div>
+										</div>
+										<div class="col-sm-2">
+											<div class="row">
+												<a href="#" onclick="removeRoute('{{route.user}}','{{route.date_saved | date:"d-m-Y h:i:s.u O"}}');"><span class="glyphicon glyphicon-remove"></span></a>
 											</div>
 										</div>
 									</div>
@@ -86,7 +94,7 @@
 </div>
 <script>
 	function orderBy(param){
-		console.log("Paso")
+		document.getElementById("operation").value = "order-by";
 		switch(param){
 			case "date-asc":
 				document.getElementById("order-by").value = "date-asc";
@@ -103,7 +111,14 @@
 			default:
 				document.getElementById("order-by").value = "date";
 		}
-		document.forms["order-by-form"].submit();
+		document.forms["saved-routes-form"].submit();
+	}
+
+	function removeRoute(user,dateSaved){
+		document.getElementById("operation").value = "delete";
+		document.getElementById("user").value = user;
+		document.getElementById("date-saved").value = dateSaved;
+		document.forms["saved-routes-form"].submit();
 	}
 </script>
 {% endblock %}
