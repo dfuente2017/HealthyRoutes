@@ -33,7 +33,9 @@
 							<div class="row">
 								<div class="col-sm-7">
 									<div id="mymap-{{ forloop.counter0 }}" style="height: 150px; width: 100%;"></div>
-									<script src="{% static 'saved-routes-map.js' %}"></script>
+									<div id="nodes-{{ forloop.counter0 }}" hidden>{{route.nodes}}</div>
+									<div id="date-{{ forloop.counter0 }}">{{route.date_saved | date:"d-m-Y H:i:s.u O"}}</div>
+									<script src="{% static 'saved-routes-script.js' %}"></script>
 									<script>
 										createMap("{{ forloop.counter0 }}");
 									</script>
@@ -53,7 +55,7 @@
 										</div>
 										<div class="col-sm-2">
 											<div class="row">
-												<a href="#" onclick="removeRoute('{{route.user}}','{{route.date_saved | date:"d-m-Y h:i:s.u O"}}');"><span class="glyphicon glyphicon-remove"></span></a>
+												<a href="#" onclick="removeRoute('{{route.user}}', '{{ forloop.counter0 }}');"><span class="glyphicon glyphicon-remove"></span></a>
 											</div>
 										</div>
 									</div>
@@ -99,33 +101,4 @@
 		</div>
 	</div>
 </div>
-<script>
-	function orderBy(param){
-		document.getElementById("operation").value = "order-by";
-		switch(param){
-			case "date-asc":
-				document.getElementById("order-by").value = "date-asc";
-				break;
-			case "date-desc":
-				document.getElementById("order-by").value = "date-desc";
-				break;
-			case "points":
-				document.getElementById("order-by").value = "points";
-				break;
-			case "distance":
-				document.getElementById("order-by").value = "distance";
-				break;
-			default:
-				document.getElementById("order-by").value = "date";
-		}
-		document.forms["saved-routes-form"].submit();
-	}
-
-	function removeRoute(user,dateSaved){
-		document.getElementById("operation").value = "delete";
-		document.getElementById("user").value = user;
-		document.getElementById("date-saved").value = dateSaved;
-		document.forms["saved-routes-form"].submit();
-	}
-</script>
 {% endblock %}

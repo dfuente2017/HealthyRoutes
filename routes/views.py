@@ -61,8 +61,10 @@ def saved_routes(request):
                 routes = order_by_dict[request.POST.get('order-by','default')]
             else:
                 user = request.POST['user']
+                aux = request.POST['date-saved']
                 date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
-                Route.objects.filter(user = user, date_saved = date_saved).delete()
+                route_db = Route.objects.filter(user = user, date_saved = date_saved)
+                route_db.delete()
                 routes = Route.objects.filter(user = request.user.email)
         else:
             routes = Route.objects.filter(user = request.user.email)
