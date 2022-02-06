@@ -84,6 +84,18 @@ li a:hover:not(.active) {
 	color: #FFFFFF;
 }
 
+.h-70{
+	height:70%;
+}
+
+.h-90{
+	height:90%;
+}
+
+.hide-scrollbar{
+	scrollbar-width: none;
+}
+
 .pestañas-login-1{
 	border-radius: 0px 0px 15px 0px;
 }
@@ -145,4 +157,8 @@ w-10{
 
 body{
 	background-color:#d8d8d8;
+}
+
+.bg-2934d3{
+	background-color: #2934d3;
 }
