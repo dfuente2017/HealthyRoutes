@@ -13,8 +13,7 @@ def login(request):
         user = auth.authenticate(email = request.POST['email'], password = request.POST['pwd'])
         if user is not None:
             auth.login(request,user)
-            #return redirect("/")
-            return redirect("/admin/")
+            return redirect("/")
         else:
             return render(request, "login.html",{"message":"Usuario y/o contraseña incorrecto."})
     else:
@@ -36,8 +35,7 @@ def register(request):
             user = User.objects.create_user(email = request.POST['email'], password = request.POST['pwd1'], nick = request.POST['nick'])
             user.save()
             auth.login(request,user)
-            #return redirect("/")
-            return redirect("/admin/")
+            return redirect("/")
         else:
             return render(request, "register.html", parameters)
     else:
@@ -46,8 +44,7 @@ def register(request):
 
 def logout(request):
     auth.logout(request)
-    #return redirect("/")
-    return redirect("/login/")
+    return redirect("/")
 
 
 def profile(request):

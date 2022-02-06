@@ -1,6 +1,5 @@
 {% load static %}
-<nav class="navbar m-3">
-  <!--<div class="row">-->
+<nav class="navbar mt-3 mb-3 mr-5 ml-5">
     <div class="col-sm-4"></div>
     <div class="col-sm-4 text-center">
       <a href="/"><img src="{% static 'img/logo.jpg' %}" width="25%"/></a> 
@@ -16,10 +15,9 @@
                 <img src="{% static 'img/user.png' %}" class="img-circle " width="15%"/>
               {% endif %}
             </a>
-            <div class="dropdown-menu bg-007bff ">
+            <div class="dropdown-menu bg-007bff">
               <a class="dropdown-item" href="/profile">Mi perfil</a>
-              <a class="dropdown-item" href="#">Rutas favoritas</a>
-              <a class="dropdown-item" href="#">Rutas completadas</a>
+              <a class="dropdown-item" href="/saved-routes">Rutas guardadas</a>
               <a class="dropdown-item" href="/logout">Cerrar sesión</a>
             </div>
           </li>
@@ -29,10 +27,6 @@
         <a href="/login"><button class="btn btn-secondary" type="submit">Iniciar sesión</button></a>
         <a href="/login"><button class="btn btn-secondary" type="submit">Registrarse</button></a>
       </div>
-      <div>
-        <img src="{% static 'img/user.png' %}" class="img-circle " width="15%"/>
-      </div>
       {% endif %}
     </div>
-  <!--</div>-->
 </nav>
