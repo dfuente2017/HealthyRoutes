@@ -19,7 +19,7 @@ class RoutesProvider():
     def routes_api_request(self):
         routes = list()
 
-        response = requests.get('https://graphhopper.com/api/1/route?point=' + str(self.init_lat) + ',' + str(self.init_long) + '&point=' + str(self.end_lat) + ',' + str(self.end_long) + '&vehicle=foot&locale=es&calc_points=true&key=2608670b-a8e3-484b-90ba-6fd4b4a3cf81&instructions=true&algorithm=alternative_route&points_encoded=false&ch.disable=true&alternative_route.max_paths=10&alternative_route.max_weight_factor=' + str(self.variation))
+        response = requests.get('https://graphhopper.com/api/1/route?point=' + str(self.init_lat) + ',' + str(self.init_long) + '&point=' + str(self.end_lat) + ',' + str(self.end_long) + '&vehicle=foot&locale=es&calc_points=true&key=1c0fa247-8118-406c-bc4e-972cee3764ad&instructions=true&algorithm=alternative_route&points_encoded=false&ch.disable=true&alternative_route.max_paths=10&alternative_route.max_weight_factor=' + str(self.variation))
         routes_json = response.json()['paths']
         
         for route_json in routes_json:
