@@ -26,7 +26,8 @@
 					<input id="date-saved" name="date-saved" type="value" hidden></input>
 				</form>
 			</div>
-			<div class="row overflow-auto hide-scrollbar">
+			<div class="thin-line"></div>
+			<div class="row overflow-auto hide-scrollbar mt-3">
 				<div class="col-sm-12">
 					{% for route in routes %}
 						<div class="card p-3 m-3 bg-secondary">
@@ -34,7 +35,7 @@
 								<div class="col-sm-7">
 									<div id="mymap-{{ forloop.counter0 }}" style="height: 150px; width: 100%;"></div>
 									<div id="nodes-{{ forloop.counter0 }}" hidden>{{route.nodes}}</div>
-									<div id="date-{{ forloop.counter0 }}">{{route.date_saved | date:"d-m-Y H:i:s.u O"}}</div>
+									<div id="date-{{ forloop.counter0 }}" hidden>{{route.date_saved | date:"d-m-Y H:i:s.u O"}}</div>
 									<script src="{% static 'saved-routes-script.js' %}"></script>
 									<script>
 										createMap("{{ forloop.counter0 }}");
@@ -93,8 +94,13 @@
 						<!--<div class="text-center mt-4">
 							<a href="#">Cargar mas</a>
 						</div>-->
+					{% empty %}
+						<div class="row mx-auto text-center m-5">
+							<div class="col-sm-12">
+								<h3>No hay rutas guardadas</h3>
+							</div>
+						</div>
 					{% endfor %}
-					
 				<div>
 					
 			</div>

@@ -41,13 +41,13 @@ class AirStation(models.Model):
     longitude = models.DecimalField(blank = False, max_digits=20, decimal_places=18)
     messures = models.EmbeddedField(model_container = Messures)
     air_quality = models.PositiveSmallIntegerField(null = True)     #5-> very good, 4-> good, 3-> mediocre, 2->bad, 1->very bad            null = True
+    #town = models.ForeignKey(Province, on_delete=models.CASCADE)
 
 
 """It is important to assing last_modified a date with datetime format, and previous or equal to the actual time."""
 class Town(models.Model):
     id = models.IntegerField(primary_key = True)
     name = models.CharField(max_length = 30, null = True)
-    air_stations = models.ArrayField(model_container = AirStation)
     url = models.URLField()
     last_modified = models.DateTimeField(auto_now_add=True, null = True)
     province = models.IntegerField(null = True)

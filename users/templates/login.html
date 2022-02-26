@@ -19,9 +19,9 @@
 		<div class="container">
 			<div class="row">
 				<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
-					<div class="row h-15">
-						<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1"> Iniciar Sesión</a>
-						<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2 non-active"> Registrarse</a>
+					<div class="row">
+						<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1"> <br/>Iniciar Sesión</a>
+						<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2 non-active"> <br/>Registrarse</a>
 					</div>
 					<div="row">
 						<form id="login" action="/login/" method="POST">
@@ -30,7 +30,7 @@
 							<div class="input-group w-75 mx-auto mt-5">
 								<input id="pwd" name="pwd" type="password" class="form-control" placeholder="Contraseña">
 								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" type="button" onclick="showPassword('pwd');">Mostrar contraseña</button>
+									<button class="btn btn-secondary" type="button" onclick="showPassword('pwd');">Mostrar contraseña</button>
 								</div>
 							</div>
 							{% if message %}
