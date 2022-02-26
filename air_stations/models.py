@@ -41,6 +41,7 @@ class AirStation(models.Model):
     longitude = models.DecimalField(blank = False, max_digits=20, decimal_places=18)
     messures = models.EmbeddedField(model_container = Messures)
     air_quality = models.PositiveSmallIntegerField(null = True)     #5-> very good, 4-> good, 3-> mediocre, 2->bad, 1->very bad            null = True
+    #town = models.ForeignKey(Province, on_delete=models.CASCADE)
 
 
 """It is important to assing last_modified a date with datetime format, and previous or equal to the actual time."""

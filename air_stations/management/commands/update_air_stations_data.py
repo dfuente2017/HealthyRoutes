@@ -32,23 +32,3 @@ class Command(BaseCommand):
                     self.stdout.write('The air stations of the town ' + str(town_id) + ' did not get saved.')
         except Error:
             raise CommandError('A problem ocurred during the command execution.')
-
-
-        """for town_id in options['town_ids']:
-            try:
-                town = Town.objects.get(id = town_id)
-                town_saved_date = town.last_modified
-                header_date = parseDatetimetz(requests.head(url = town.url).headers['Last-Modified'])
-
-                #if town_saved_date < header_date:
-                if False:
-                    fmr = FactoryMessuresReader(town_id)
-                    messures_reader = fmr.provide_messures_reader()
-                    messures_reader.read_messures()
-                    town.last_modified = header_date
-                    town.save()
-                    self.stdout.write('Se han actualizado las estaciones de calidad del aire')
-                else:
-                    self.stdout.write('The air stations did not get saved.')
-            except Error:
-                raise CommandError('A problem ocurred during the command execution')"""
