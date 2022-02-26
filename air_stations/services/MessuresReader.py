@@ -35,9 +35,7 @@ class MessuresReader1(MessuresReaderInterface): #args -> [0]:container, [1]: tow
 
             value = 'N'
             for verified_string in verified_list:
-                if(data.find(verified_string).contents[0] == 'N'):
-                    break
-                else:
+                if(data.find(verified_string).contents[0] == 'V'):  #Tenemos que recorrer todos los valores ya que es posible que se intercalesn N con valores validos entre horas
                     value = float(data.find(verified_string.replace(self.args[5],self.args[4])).contents[0])
 
             if(not (air_station in air_stations)):

@@ -98,10 +98,16 @@ li a:hover:not(.active) {
 
 .pestañas-login-1{
 	border-radius: 0px 0px 15px 0px;
+	height: 60px;
+	font-size:125%;
+	font-weight: bold;
 }
 
 .pestañas-login-2{
 	border-radius: 0px 0px 0px 15px;
+	height: 60px;
+	font-size:125%;
+	font-weight: bold;
 }
 
 .non-active{
@@ -161,4 +167,18 @@ body{
 
 .bg-2934d3{
 	background-color: #2934d3;
+}
+
+.custom-navbar-buttons{
+	height:50px;
+	width:25%;
+	font-size: 120%;
+}
+
+.thin-line{
+	background-color: #FFFFFF;
+	height: 1px;
+	width: 75%;
+	margin-right:auto;
+	margin-left: auto;
 }
