@@ -48,7 +48,6 @@ class AirStation(models.Model):
 class Town(models.Model):
     id = models.IntegerField(primary_key = True)
     name = models.CharField(max_length = 30, null = True)
-    air_stations = models.ArrayField(model_container = AirStation)
     url = models.URLField()
     last_modified = models.DateTimeField(auto_now_add=True, null = True)
     province = models.IntegerField(null = True)
