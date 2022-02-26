@@ -46,9 +46,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <h1>Ranking</h1>
-                </div>
+                {% if routes %}
+                    <div class="row">
+                        <h1>Ranking</h1>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <h1>Info</h1>
+                    </div>
+                {% endif %}
                 <div id = "route-ranking-container" class = "row overflow-auto hide-scrollbar" style="height: 500px;">
                     <div id="csrfmiddlewaretoken" hidden>{{csrf_token}}</div>
                     {% for route in routes %}
@@ -114,6 +120,31 @@
                             <div class ="row mb-2 mt-2">
                                 <div class="col-sm-12 text-right">
                                     <a href="#"><i id="info_button_{{ forloop.counter0 }}" class="glyphicon glyphicon-chevron-down"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div id="info_card" class = "card bg-primary text-white col-sm-12 mb-3";>
+                            <div class="row mt-3">
+                                <div class="col-sm-12">
+                                    <h2>Cómo buscar rutas</h2>
+                                    <h5>1. Haga doble click para situar el marcador de incio de la ruta en el mapa.</h5>
+                                    <h5>2. Repita el anterior paso para situar el marcador de fin de la ruta en el mapa.</h5>
+                                    <h5>3. Si desea ajustar alguno de los dos marcadores pinche sobre uno y arrastrelo donde quiera.</h5>
+                                    <h5>4. Si desea borrar los marcadores y ponerlos de nuevo pulse el botón de "Eliminar puntos".</h5>
+                                    <h5>5. Si desea cambiar la variación de las rutas por defecto, abra el desplegable de variación de las rutas e ingrese el valor que usted desee.</h5>
+                                    <h5>6. Finalmente, pulse el botón "Buscar rutas".</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-sm-12">
+                                    <h2>Valores de las estaciones de calidad del aire</h2>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}"></img> Muy buena</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}"></img> Buena</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}"></img> Regular</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}"></img> Mala</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}"></img> Muy mala</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/grey-pilot.png' %}"></img> Desconocida</p>
                                 </div>
                             </div>
                         </div>
