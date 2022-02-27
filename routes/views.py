@@ -3,7 +3,6 @@ from numpy import RankWarning
 
 from routes.serializers import RouteSerializer
 from .services.RoutesProvider import RoutesProvider
-from .services.GreenAreasProvider import GreenAreasProvider
 from .services.RoutesRankingAlgorithim import RoutesRankingAlgorithim
 
 from rest_framework.decorators import api_view
@@ -31,12 +30,9 @@ def index(request):
         rra = RoutesRankingAlgorithim()
         
         routes_provider = RoutesProvider(init_lat, init_long, end_lat, end_long, variation)
-        green_areas_provider = GreenAreasProvider()
         routes = routes_provider.get_routes()
-        routes = green_areas_provider.get_green_areas(routes)
 
         routes = rra.add_air_quality_puntuation(routes)
-        routes = rra.add_surface_quality_puntuation(routes)
         routes = rra.add_ranking_puntuation(routes)
         routes = rra.sort_ranking(routes)
 
@@ -61,7 +57,6 @@ def saved_routes(request):
                 routes = order_by_dict[request.POST.get('order-by','default')]
             else:
                 user = request.POST['user']
-                aux = request.POST['date-saved']
                 date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
                 route_db = Route.objects.filter(user = user, date_saved = date_saved)
                 route_db.delete()

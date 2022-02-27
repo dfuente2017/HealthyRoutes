@@ -55,32 +55,14 @@ class RoutesRankingAlgorithim():
         return (((lat2-lat1)**2) + ((long2-long1)**2))**0.5
 
 
-    def add_surface_quality_puntuation(self, routes):
-        for route in routes:
-            route.nodes_on_green_areas = None           #When the surface quality is implemented this shoul be changed to "= 0"
-            route.nodes_on_non_green_areas = None       #Idem
-            for node in route.nodes:
-                if node['surface_quality'] != None:
-                    if node['suface_quality']:
-                        route.nodes_on_green_areas += 1
-                    else:
-                        route.nodes_on_non_green_areas += 1
-        return routes
-
-
     def add_ranking_puntuation(self, routes):
         for route in routes:
             route.ranking_puntuation = 0
             
-            if(not(route.very_good_air_quality_nodes == None and route.good_air_quality_nodes == None and route.mediocre_air_quality_nodes == None and route.bad_air_quality_nodes and route.very_bad_air_quality_nodes == None)):
-                route.ranking_puntuation = (route.very_good_air_quality_nodes + route.good_air_quality_nodes * 0.8 + route.mediocre_air_quality_nodes * 0.5 + route.bad_air_quality_nodes * 0.2 + route.very_bad_air_quality_nodes * 0) * 0.5
+            if(not(route.very_good_air_quality_nodes == None and route.good_air_quality_nodes == None and route.mediocre_air_quality_nodes == None and route.bad_air_quality_nodes and route.very_bad_air_quality_nodes == None and route.unknown_air_quality_nodes == None)):
+                route.ranking_puntuation = (route.very_good_air_quality_nodes + route.good_air_quality_nodes * 0.75 + route.mediocre_air_quality_nodes * 0.5 + route.bad_air_quality_nodes * 0.25 + route.very_bad_air_quality_nodes * 0 + route.unknown_air_quality_nodes * 0.5)
             else:
-                route.ranking_puntutation += 25
-                
-            if(not(route.nodes_on_green_areas == None and route.nodes_on_non_green_areas == None)):
-                route.ranking_puntuation += route.nodes_on_green_areas*0.5
-            else:
-                route.ranking_puntuation += 25
+                route.ranking_puntutation += 50
 
             route.ranking_puntuation = round(route.ranking_puntuation, 1)
         return routes

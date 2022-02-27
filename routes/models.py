@@ -32,9 +32,5 @@ class Route(models.Model):
     bad_air_quality_nodes = models.IntegerField(null = False)
     very_bad_air_quality_nodes = models.IntegerField(null = False)
     unknown_air_quality_nodes = models.IntegerField(null = False)
-    
-    #Percentage of nodes in each zone
-    nodes_on_green_areas = models.IntegerField(null = True)
-    nodes_on_non_green_areas = models.IntegerField(null = True)
 
     ranking_puntuation = models.DecimalField(max_digits=4, decimal_places=1, null = False)
