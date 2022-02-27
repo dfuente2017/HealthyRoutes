@@ -5,8 +5,8 @@ var airStationsMarkersOptions = {
     draggable: false
 }
 
-var nMarkers = 0;
 var lastRouteShown = null;
+var initEndRouteMarkers = new Array();
 var routeMarkers = new Array();
 var polyline = null;
 
@@ -106,6 +106,11 @@ var routeMarkersOptions = {
     draggable: true
 }
 
+var initEndRouteMarkersOptions = {
+    clickable: true,
+    draggable: false
+}
+
 
 map.on("dblclick", function(e){
     if(routeMarkers.length < 2){
@@ -166,6 +171,10 @@ function selectRoute(n){
         for(let i=0;i<nodesParsed.length;i++){
             latlngs.push([nodesParsed[i].latitude, nodesParsed[i].longitude]);
         }
+
+        initEndRouteMarkers.push(new L.Marker([latlngs[0][0], latlngs[0][1]], initEndRouteMarkersOptions).addTo(map));
+        initEndRouteMarkers.push(new L.Marker([latlngs[latlngs.length-1][0], latlngs[latlngs.length-1][1]], initEndRouteMarkersOptions).addTo(map));
+
         polyline = L.polyline(latlngs, {color:'#3388ff', weight:5}).addTo(map);
     
         map.fitBounds(polyline.getBounds());

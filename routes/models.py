@@ -7,7 +7,6 @@ class Node(models.Model):
     latitude = models.DecimalField(max_digits=18, decimal_places=15, null= True)
     longitude = models.DecimalField(max_digits=18, decimal_places=15, null = True)
     air_quality = models.IntegerField(null = True)
-    surface_quality = models.BooleanField(null = True)
 
 
 class Instruction(models.Model):
