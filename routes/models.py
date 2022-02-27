@@ -7,7 +7,6 @@ class Node(models.Model):
     latitude = models.DecimalField(max_digits=18, decimal_places=15, null= True)
     longitude = models.DecimalField(max_digits=18, decimal_places=15, null = True)
     air_quality = models.IntegerField(null = True)
-    surface_quality = models.BooleanField(null = True)
 
 
 class Instruction(models.Model):
@@ -32,9 +31,5 @@ class Route(models.Model):
     bad_air_quality_nodes = models.IntegerField(null = False)
     very_bad_air_quality_nodes = models.IntegerField(null = False)
     unknown_air_quality_nodes = models.IntegerField(null = False)
-    
-    #Percentage of nodes in each zone
-    nodes_on_green_areas = models.IntegerField(null = True)
-    nodes_on_non_green_areas = models.IntegerField(null = True)
 
     ranking_puntuation = models.DecimalField(max_digits=4, decimal_places=1, null = False)

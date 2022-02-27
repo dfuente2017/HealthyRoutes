@@ -35,7 +35,6 @@ class RoutesProvider():
                 node['longitude'] = node_json[0]
                 node['latitude'] = node_json[1]
                 node['air_quality'] = None
-                node['surface_quality'] = None
 
                 nodes.append(node)
 
