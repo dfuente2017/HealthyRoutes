@@ -7,16 +7,18 @@ import re
 # Create your views here.
 
 def login(request):
-    auth.logout(request)
+    if(request.user.is_authenticated):
+        auth.logout(request)
+
     if request.method == 'POST':
         user = auth.authenticate(email = request.POST['email'], password = request.POST['pwd'])
         if user is not None:
             auth.login(request,user)
             return redirect("/")
         else:
-            return render(request, "login.html",{"message":"Usuario y/o contraseña incorrecto."})
+            return render(request, "login.html",{"message":"Usuario y/o contraseña incorrecto."}, status = 401)
     else:
-        return render(request, "login.html")
+        return render(request, "login.html", status = 200)
 
 
 def register(request):
@@ -82,7 +84,7 @@ def profile(request):
         else:
             return render(request, "profile.html")
     else:
-        return render(request, "login.html")  
+        return render(request, "login.html")
 
 
 
