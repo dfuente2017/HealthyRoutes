@@ -1,17 +1,15 @@
 from django.shortcuts import render, redirect
-from django.views.generic import View
-from .models import AirStation, Country, Province, Town
 from django.http import JsonResponse
+
+from .models import AirStation, Country, Province, Town
 from air_stations.services.FactoryReadCsv import FactoryReadCsv
 
-
-from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response as ApiResponse
 from .serializers import AirStationSerializer
 
-# Create your views here.
 
+# Create your views here.
 def upload_air_stations(request):
     if request.user.is_authenticated and request.user.is_superuser:
         if request.method == 'POST':

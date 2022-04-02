@@ -74,5 +74,3 @@ class RoutesRankingAlgorithim():
 
         routes.sort(reverse = True, key=sort_ranking_aux)
         return routes
-
-
