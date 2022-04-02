@@ -168,3 +168,31 @@ class TestViews(TestCase):
         self.assertEquals('message_pwd' in response.context, False)
         self.assertEquals('message_email' in response.context, False)
         self.assertEquals('message_nick' in response.context, False)
+
+
+    #Logout
+    def test_logout_with_logged_user(self):
+        response = self.client.post(self.login_url,{
+            'email':'testing@testing.com',
+            'pwd': 'Testing12345'
+        }, follow = True)
+
+        self.assertEquals(response.context['user'].is_active, True)
+        
+        response = self.client.get(self.logout_url, follow = True)
+        
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertEquals(response.context['user'].is_active, False)
+
+
+    def test_logout_without_logged_user(self):
+        response = self.client.get(self.login_url)
+        
+        self.assertEquals(response.context['user'].is_active, False)
+        
+        response = self.client.get(self.logout_url, follow = True)
+        
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertEquals(response.context['user'].is_active, False)
