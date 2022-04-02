@@ -54,3 +54,117 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 401)
         self.assertTemplateUsed(response, 'login.html')
         self.assertEquals('message' in response.context, True)
+
+    
+    #Register
+    def test_register_GET(self):
+        response = self.client.get(self.register_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'register.html')
+
+
+    def test_register_POST_different_passwords(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'registeremail',
+            'pwd1':'Testing12345',
+            'pwd2':'12345Testing'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_pwd' in response.context, True)
+    
+
+    def test_register_POST_short_password(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'registeremail',
+            'pwd1':'Testing',
+            'pwd2':'Testing'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_pwd' in response.context, True)
+    
+
+    def test_register_POST_no_lower_case_letter_in_password(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'registeremail',
+            'pwd1':'TESTING12345',
+            'pwd2':'TESTING12345'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_pwd' in response.context, True)
+
+
+    def test_register_POST_no_upper_case_letter_in_password(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'registeremail',
+            'pwd1':'testing12345',
+            'pwd2':'testing12345'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_pwd' in response.context, True)
+
+    
+    def test_register_POST_no_number_in_password(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'registeremail',
+            'pwd1':'TestingTesting',
+            'pwd2':'TestingTesting'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_pwd' in response.context, True)
+
+
+    def test_register_POST_used_email(self):
+        response = self.client.post(self.register_url, {
+            'email':'testing@testing.com',
+            'nick':'registeremail',
+            'pwd1':'Testing12345',
+            'pwd2':'Testing12345'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_email' in response.context, True)
+
+
+    def test_register_POST_used_nick(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'testing',
+            'pwd1':'Testing12345',
+            'pwd2':'Testing12345'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed(response, 'register.html')
+        self.assertEquals('message_nick' in response.context, True)
+
+
+    def test_register_POST_correct_register(self):
+        response = self.client.post(self.register_url, {
+            'email':'registeremail@registeremail.com',
+            'nick':'registeremail',
+            'pwd1':'Testing12345',
+            'pwd2':'Testing12345'
+        }, follow = True)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertEquals('message_pwd' in response.context, False)
+        self.assertEquals('message_email' in response.context, False)
+        self.assertEquals('message_nick' in response.context, False)

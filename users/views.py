@@ -22,11 +22,13 @@ def login(request):
 
 
 def register(request):
-    auth.logout(request)
+    if(request.user.is_authenticated):
+        auth.logout(request)
+        
     parameters = dict()
     if request.method == 'POST':
         if not checkPassword(request.POST['pwd1'], request.POST['pwd2']):
-            parameters['message_nick'] = ('Ese nick ya está en uso.')
+            parameters['message_pwd'] = ('La contraseña no cumple los requisitos.')
         if not len(User.objects.filter(email=request.POST['email'])) == 0:
             parameters['message_email'] = ('Ese email ya está en uso.')
         if not len(User.objects.filter(nick=request.POST['nick'])) == 0:
@@ -38,9 +40,9 @@ def register(request):
             auth.login(request,user)
             return redirect("/")
         else:
-            return render(request, "register.html", parameters)
+            return render(request, "register.html", parameters, status = 400)
     else:
-        return render(request, "register.html")
+        return render(request, "register.html", status = 200)
 
 
 def logout(request):
