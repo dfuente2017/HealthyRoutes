@@ -54,6 +54,7 @@ def profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             parameters = dict()
+            status_code = 200
             user = request.user
 
             if 'delete-img' in request.POST:
@@ -69,24 +70,25 @@ def profile(request):
                 user.user_img = image
 
             if 'pwd1' in request.POST and len(request.POST['pwd1'])!= 0:
-                print(checkPassword(request.POST['pwd1'],request.POST['pwd2']))
                 if checkPassword(request.POST['pwd1'], request.POST['pwd2']):
                     user.set_password(request.POST['pwd1'])
                 else:
                     parameters['message_pwd'] = ('La contraseña no cumple los requisitos.')
+                    status_code = 400
 
             if 'nick' in request.POST:
                 if len(User.objects.filter(nick=request.POST['nick'])) == 0:
                     user.nick = request.POST['nick']
                 else:
                     parameters['message_nick'] = ('El nick "%s" no está disponible.' % request.POST['nick'])
-
+                    status_code = 400
+                    
             user.save()
-            return render(request, "profile.html", parameters)
+            return render(request, "profile.html", parameters, status= status_code)
         else:
             return render(request, "profile.html")
     else:
-        return render(request, "login.html")
+        return render(request, "login.html", status=401)
 
 
 
