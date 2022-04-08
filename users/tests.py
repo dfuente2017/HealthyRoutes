@@ -4,7 +4,7 @@ from os import remove
 from django.conf import settings
 
 # Create your tests here.
-class TestViews(TestCase):
+class UsersTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.login_url = '/login/'
@@ -241,7 +241,7 @@ class TestViews(TestCase):
         response = self.client.post(self.profile_url)
         self.assertEquals(response.context['user'].user_img, '')
 
-        img = open(str(settings.MEDIA_ROOT + 'user_img/users-testing-img.jpg').replace("\\","/"),'rb')
+        img = open(str(settings.MEDIA_ROOT + 'testing-files/users-testing-img.jpg').replace("\\","/"),'rb')
         
         response = self.client.post(self.profile_url,{
             'user_img':img
@@ -383,7 +383,7 @@ class TestViews(TestCase):
         self.assertNotEquals(response.context['user'].nick, 'registeremail')
 
     
-    def test_register_POST_unuser_nick(self):
+    def test_register_POST_unused_nick(self):
         self.client.login(username = 'testing@testing.com', password = 'Testing12345')
         
         response = self.client.post(self.profile_url,{

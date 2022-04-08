@@ -20,15 +20,13 @@ def upload_air_stations(request):
             csv_reader = frc.provide_csv_reader_class()
             csv_reader.read_csv(file = airStationFile, town = town)
 
-            return redirect("/upload-air-stations") # Enviar paises
-            #return render(request, "upload-air-stations.html")
+            return redirect("/upload-air-stations")
         else:
             parameters = dict()
             parameters['countries'] = Country.objects.all()
             return render(request, "upload-air-stations.html", parameters)
     else:
-        #return render(request, "error page")
-        return render(request, "index.html")
+        return render(request, "index.html", status=401)
 
 
 #Ajax requests

@@ -49,7 +49,7 @@ def saved_routes(request):
                 }
 
                 routes = order_by_dict[request.POST.get('order-by','default')]
-            else:
+            else:   #Delete route
                 user = request.POST['user']
                 date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
                 route_db = Route.objects.filter(user = user, date_saved = date_saved)

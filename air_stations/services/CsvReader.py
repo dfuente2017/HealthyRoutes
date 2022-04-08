@@ -28,14 +28,14 @@ class CsvReader1(CsvReaderInterface):   #args -> [0]:ids_key, [1]: names_key, [2
         for i in range(len(ids)):
             try:
                 air_station = AirStation.objects.get(id = ids[i])
-                air_station.name = names[i]
-                air_station.town = town.id
-                air_station.latitude = latitudes[i]
-                air_station.longitude = longitudes[i]
+                air_station.name = str(names[i])
+                air_station.town_id = int(town.id)
+                air_station.latitude = float(latitudes[i])
+                air_station.longitude = float(longitudes[i])
 
                 air_station.save()
             except:
-                AirStation.objects.create(id = ids[i], name = names[i], town = town.id, latitude = latitudes[i], longitudes = longitudes[i], messures = None)
+                AirStation.objects.create(id = int(ids[i]), name = str(names[i]), town_id = int(town.id), latitude = float(latitudes[i]), longitude = float(longitudes[i]), messures = None)
    
 
     """def read_csv(self, file, town):
