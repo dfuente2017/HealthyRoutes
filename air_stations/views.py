@@ -34,7 +34,7 @@ def upload_air_stations(request):
 def get_provinces(request):
     if request.user.is_authenticated and request.user.is_superuser:
         status = 200
-        country_id = request.GET.get('country_id', 0)  #Esta puesto que si no se recibe pais saque a España
+        country_id = request.GET.get('country_id', -1)
         provinces = Province.objects.filter(country = country_id)
         if(len(provinces) > 0):
             response = convert_list_into_dict(provinces)
@@ -48,16 +48,18 @@ def get_provinces(request):
 
 def get_towns(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        try:
-            province = request.GET.get('province_id', -1)
-            response = convert_list_into_dict(Town.objects.filter(province = province))
-        except Exception as e:
+        status = 200
+        province_id = request.GET.get('province_id', -1)
+        towns = Town.objects.filter(province = province_id)
+        if(len(towns) > 0):
+            response = convert_list_into_dict(towns)
+        else:
             response = dict()
-            response['error'] = str(e)
-        return JsonResponse(response, status = None)
+            response['error'] = str('No existen ciudades asociadas a ese id de provincia.')
+            status = 400
+        return JsonResponse(response, status = status)
     else:
-        #return render(request, "error page")
-        return render(request, "index.html")
+        return render(request, "index.html", status = 401)
 
 
 def convert_list_into_dict(provinces = list()):

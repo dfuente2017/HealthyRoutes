@@ -18,7 +18,7 @@ class AirStationsTests(TestCase):
         self.su = User.objects.create_superuser(email = 'testingsu@testing.com', password = 'Testing12345', nick = 'testingsu', is_admin = True, is_staff = True, is_superuser = True)
         Country.objects.create(id = 0, name = 'TestCountry')
         Province.objects.create(id = 28, name = 'TestProvince', country = 0)
-        Town.objects.create(id = 79, name = 'TestTown', url = None, province = None, last_modified = None)
+        Town.objects.create(id = 79, name = 'TestTown', url = None, province = 28, last_modified = None)
         Arguments.objects.create(id = 1, town_id = 79, argument_type = 'ASD', arguments = [{'id':0, 'argument':'CODIGO'},{'id':1, 'argument':'ESTACION'},{'id':2, 'argument':'LONGITUD'},{'id':3, 'argument':'LATITUD'}])
 
     #upload_air_stations
@@ -131,15 +131,61 @@ class AirStationsTests(TestCase):
 
 
 
-    def test_get_provinces_GET_default_country(self):
+    def test_get_provinces_GET_no_country(self):
         self.client.login(username = 'testingsu@testing.com', password = 'Testing12345')
 
         response = self.client.get(self.get_provinces_url)
 
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(json.loads(response.content),{'28':'TestProvince'})
-
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error' in json.loads(response.content), True)  
+    
 
     #get_towns
-    def test_get_town_GET_with_no_user_logged(self):
-        pass
+    def test_get_towns_GET_with_no_user_logged(self):
+        response = self.client.post(self.get_towns_url)
+
+        self.assertEquals(response.status_code, 401)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertEquals(response.context['user'].is_active, False)
+
+    
+    def test_get_towns_GET_with_no_superuser(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+
+        response = self.client.post(self.get_towns_url)
+
+        self.assertEquals(response.status_code, 401)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertEquals(response.context['user'].is_active, True)
+        self.assertEquals(response.context['user'].is_superuser, False)
+
+    
+    def test_get_towns_GET_incorrect_province_id(self):
+        self.client.login(username = 'testingsu@testing.com', password = 'Testing12345')
+
+        response = self.client.get(self.get_towns_url,{
+            'province_id':0
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error' in json.loads(response.content), True)
+
+
+    def test_get_towns_GET_correct_province_id(self):
+        self.client.login(username = 'testingsu@testing.com', password = 'Testing12345')
+
+        response = self.client.get(self.get_towns_url,{
+            'province_id':28
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(json.loads(response.content),{'79':'TestTown'})
+
+
+    def test_get_towns_GET_no_province(self):
+        self.client.login(username = 'testingsu@testing.com', password = 'Testing12345')
+
+        response = self.client.get(self.get_towns_url)
+
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error' in json.loads(response.content), True) 
