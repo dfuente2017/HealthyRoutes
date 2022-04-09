@@ -6,6 +6,7 @@ from air_stations.services.FactoryReadCsv import FactoryReadCsv
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response as ApiResponse
+from rest_framework import status
 from .serializers import AirStationSerializer
 
 
@@ -30,19 +31,20 @@ def upload_air_stations(request):
 
 
 #Ajax requests
-
 def get_provinces(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        try:
-            country = request.GET.get('country_id', 0)  #Esta puesto que si no se recibe pais saque a España
-            response = convert_list_into_dict(Province.objects.filter(country = country))
-        except Exception as e:
+        status = 200
+        country_id = request.GET.get('country_id', 0)  #Esta puesto que si no se recibe pais saque a España
+        provinces = Province.objects.filter(country = country_id)
+        if(len(provinces) > 0):
+            response = convert_list_into_dict(provinces)
+        else:
             response = dict()
-            response['error'] = str(e)
-        return JsonResponse(response)
+            response['error'] = str('No existen provincias asociadas a ese id de pais.')
+            status = 400
+        return JsonResponse(response, status = status)
     else:
-        #return render(request, "error page")
-        return render(request, "index.html")
+        return render(request, "index.html", status= 401)
 
 def get_towns(request):
     if request.user.is_authenticated and request.user.is_superuser:
@@ -52,7 +54,7 @@ def get_towns(request):
         except Exception as e:
             response = dict()
             response['error'] = str(e)
-        return JsonResponse(response)
+        return JsonResponse(response, status = None)
     else:
         #return render(request, "error page")
         return render(request, "index.html")
