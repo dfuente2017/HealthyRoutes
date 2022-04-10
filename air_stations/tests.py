@@ -12,7 +12,7 @@ class AirStationsTests(TestCase):
         self.upload_air_stations_url = '/upload-air-stations'
         self.get_provinces_url = '/get/provinces'
         self.get_towns_url = '/get/towns'
-        self.api_get_air_stations_url = 'api/air_stations'
+        self.api_get_air_stations_url = '/api/air_stations'
 
         User.objects.create_user(email = 'testing@testing.com', password = 'Testing12345', nick= 'testing')
         self.su = User.objects.create_superuser(email = 'testingsu@testing.com', password = 'Testing12345', nick = 'testingsu', is_admin = True, is_staff = True, is_superuser = True)
@@ -20,6 +20,7 @@ class AirStationsTests(TestCase):
         Province.objects.create(id = 28, name = 'TestProvince', country = 0)
         Town.objects.create(id = 79, name = 'TestTown', url = None, province = 28, last_modified = None)
         Arguments.objects.create(id = 1, town_id = 79, argument_type = 'ASD', arguments = [{'id':0, 'argument':'CODIGO'},{'id':1, 'argument':'ESTACION'},{'id':2, 'argument':'LONGITUD'},{'id':3, 'argument':'LATITUD'}])
+
 
     #upload_air_stations
     def test_upload_air_stations_GET_with_no_logged_user(self):
@@ -188,4 +189,54 @@ class AirStationsTests(TestCase):
         response = self.client.get(self.get_towns_url)
 
         self.assertEquals(response.status_code, 400)
-        self.assertEquals('error' in json.loads(response.content), True) 
+        self.assertEquals('error' in json.loads(response.content), True)
+
+
+    #api_get_air_stations
+    def test_api_get_air_stations_GET_incorrect_town_id(self):
+        AirStation.objects.create(id= 1, name = 'TestAirStation1', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 2, name = 'TestAirStation2', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 3, name = 'TestAirStation3', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 4, name = 'TestAirStation4', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 5, name = 'TestAirStation5', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 6, name = 'TestAirStation6', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 80)#Object with other town_id
+
+        response = self.client.get(self.api_get_air_stations_url,{
+            'town_id':0
+        })
+
+        self.assertEquals(response.status_code,400)
+        
+    
+    def test_api_get_air_stations_GET_correct_town_id(self):
+        AirStation.objects.create(id= 1, name = 'TestAirStation1', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 2, name = 'TestAirStation2', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 3, name = 'TestAirStation3', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 4, name = 'TestAirStation4', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 5, name = 'TestAirStation5', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 6, name = 'TestAirStation6', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 80)#Object with other town_id
+
+        response = self.client.get(self.api_get_air_stations_url,{
+            'town_id':79
+        })
+
+        air_stations = json.loads(response.content)
+        air_stations_db = AirStation.objects.filter(town_id = 79)
+        air_stations_db_count = len(air_stations_db)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(air_stations_db[0].id, air_stations[0]['id'])
+        self.assertEquals(air_stations_db[air_stations_db_count-1].id, air_stations[air_stations_db_count-1]['id'])
+
+
+    def test_api_get_air_stations_GET_no_town_id(self):
+        AirStation.objects.create(id= 1, name = 'TestAirStation1', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 2, name = 'TestAirStation2', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 3, name = 'TestAirStation3', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 4, name = 'TestAirStation4', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 5, name = 'TestAirStation5', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 79)
+        AirStation.objects.create(id= 6, name = 'TestAirStation6', latitude = 40.01, longitude = -3.71, messures = None, air_quality = None, town_id = 80)#Object with other town_id
+
+        response = self.client.get(self.api_get_air_stations_url)
+
+        self.assertEquals(response.status_code, 400)
