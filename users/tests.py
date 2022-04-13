@@ -3,6 +3,7 @@ from users.models import User
 from os import remove
 from django.conf import settings
 
+
 # Create your tests here.
 class UsersTests(TestCase):
     def setUp(self):
