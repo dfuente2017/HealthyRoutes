@@ -261,9 +261,9 @@ class RoutesTests(TestCase):
         self.assertEquals(response.context['user'].is_active, True)
         self.assertEquals('error_msg' in response.context, False)
         self.assertEquals('routes' in response.context, True)
-        self.assertEquals(response.context['routes'].count(), 6)
-        self.assertEquals(response.context['routes'].first().time, 2)
-        self.assertEquals(response.context['routes'].last().time, 3)
+        self.assertEquals(len(response.context['routes']), 6)
+        self.assertEquals(response.context['routes'][0].time, 2)
+        self.assertEquals(response.context['routes'][5].time, 3)
 
 
     def test_saved_routes_POST_operation_order_by_distance(self):
@@ -279,14 +279,6 @@ class RoutesTests(TestCase):
         self.assertEquals(response.context['user'].is_active, True)
         self.assertEquals('error_msg' in response.context, False)
         self.assertEquals('routes' in response.context, True)
-        self.assertEquals(response.context['routes'].count(), 6)
-
-        print(response.context['routes'][0].distance)
-        print(response.context['routes'][1].distance)
-        print(response.context['routes'][2].distance)
-        print(response.context['routes'][3].distance)
-        print(response.context['routes'][4].distance)
-        print(response.context['routes'][5].distance)
-
-        self.assertEquals(response.context['routes'].first().time, 4)
-        self.assertEquals(response.context['routes'].last().time, 5)
+        self.assertEquals(len(response.context['routes']), 6)
+        self.assertEquals(response.context['routes'][0].time, 4)
+        self.assertEquals(response.context['routes'][5].time, 5)

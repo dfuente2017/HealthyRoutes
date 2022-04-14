@@ -55,19 +55,23 @@ def saved_routes(request):
         status = 200
         if request.method == 'POST':
             if 'operation' in request.POST and request.POST['operation'] == 'order-by':
-                order_by_dict = {   
-                    'date-asc': Route.objects.filter(user = request.user.email).order_by('date_saved'),
-                    'date-desc': Route.objects.filter(user = request.user.email).order_by('date_saved').reverse(),
-                    'points': Route.objects.filter(user = request.user.email).order_by('ranking_puntuation').reverse(), 
-                    'distance': Route.objects.filter(user = request.user.email).order_by('distance').reverse(),
-                    'default': Route.objects.filter(user = request.user.email)
-                }
-
-                if(request.POST.get('order-by','default') not in order_by_dict):
+                order_by = request.POST.get('order-by','default')
+                if(order_by == 'date-asc'):
+                    response['routes'] = Route.objects.filter(user = request.user.email).order_by('date_saved')
+                elif(order_by == 'date-desc'):
+                    response['routes'] = Route.objects.filter(user = request.user.email).order_by('-date_saved')
+                elif(order_by == 'points'):
+                    response['routes'] = list(Route.objects.filter(user = request.user.email))
+                    response['routes'].sort(reverse = True, key=lambda item: float(item.ranking_puntuation))
+                elif(order_by == 'distance'):
+                    response['routes'] = list(Route.objects.filter(user = request.user.email))
+                    response['routes'].sort(reverse = True, key=lambda item: float(item.distance))
+                elif(order_by == 'default'):
+                    response['routes'] = Route.objects.filter(user = request.user.email)
+                else:
                     response['error_msg'] = str('No se ha incluido el parametro operation correctamente.')
                     status = 400
-                else:
-                    response['routes'] = order_by_dict[request.POST.get('order-by','default')]
+
             elif 'operation' in request.POST and request.POST['operation'] == 'order-by':  #Delete route
                 user = request.POST['user']
                 date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
