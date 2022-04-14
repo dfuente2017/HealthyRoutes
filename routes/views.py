@@ -51,9 +51,10 @@ def index(request):
 
 def saved_routes(request):
     if request.user.is_authenticated:
-        routes = None
+        response = dict()
+        status = 200
         if request.method == 'POST':
-            if request.POST['operation'] == 'order-by':
+            if 'operation' in request.POST and request.POST['operation'] == 'order-by':
                 order_by_dict = {   
                     'date-asc': Route.objects.filter(user = request.user.email).order_by('date_saved'),
                     'date-desc': Route.objects.filter(user = request.user.email).order_by('date_saved').reverse(),
@@ -62,18 +63,25 @@ def saved_routes(request):
                     'default': Route.objects.filter(user = request.user.email)
                 }
 
-                routes = order_by_dict[request.POST.get('order-by','default')]
-            else:   #Delete route
+                if(request.POST.get('order-by','default') not in order_by_dict):
+                    response['error_msg'] = str('No se ha incluido el parametro operation correctamente.')
+                    status = 400
+                else:
+                    response['routes'] = order_by_dict[request.POST.get('order-by','default')]
+            elif 'operation' in request.POST and request.POST['operation'] == 'order-by':  #Delete route
                 user = request.POST['user']
                 date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
                 route_db = Route.objects.filter(user = user, date_saved = date_saved)
                 route_db.delete()
-                routes = Route.objects.filter(user = request.user.email)
+                response['routes'] = Route.objects.filter(user = request.user.email)
+            else:
+                response['error_msg'] = str('No se ha incluido el parametro operation correctamente.')
+                status = 400
         else:
-            routes = Route.objects.filter(user = request.user.email)
-        return render(request, "saved-routes.html", {'routes': routes})
+            response['routes'] = Route.objects.filter(user = request.user.email)
+        return render(request, "saved-routes.html", response, status=status)
     else:
-        return render(request, "login.html")
+        return render(request, "login.html", status = 401)
 
 
 @api_view(['POST']) # And DELETE (because of the problem that we can pass data to the ajax request)
