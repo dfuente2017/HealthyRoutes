@@ -15,10 +15,15 @@ import datetime
 
 def index(request):
     if request.method == 'POST':
-        init_lat = request.POST['initLatitude']
-        init_long = request.POST['initLongitude']
-        end_lat = request.POST['endLatitude']
-        end_long = request.POST['endLongitude']
+        try:
+            init_lat = request.POST['initLatitude']
+            init_long = request.POST['initLongitude']
+            end_lat = request.POST['endLatitude']
+            end_long = request.POST['endLongitude']
+        except:
+            error_msg = str('Numero de parametros recibido incorrecto')
+            return render(request, "index.html", {'error_msg':error_msg}, status=400)
+
         variation = request.POST.get('variation', 1.5)
 
         rra = RoutesRankingAlgorithim()
@@ -26,11 +31,20 @@ def index(request):
         routes_provider = RoutesProvider(init_lat, init_long, end_lat, end_long, variation)
         routes = routes_provider.get_routes()
 
-        routes = rra.add_air_quality_puntuation(routes)
-        routes = rra.add_ranking_puntuation(routes)
-        routes = rra.sort_ranking(routes)
+        response = dict()
+        status = None
+        if(len(routes) > 0): 
+            routes = rra.add_air_quality_puntuation(routes)
+            routes = rra.add_ranking_puntuation(routes)
+            routes = rra.sort_ranking(routes)
+            
+            response['routes'] = routes
+            status = 200
+        else:
+            response['error_msg'] = str('Error con la API Graphhopper.')
+            status = 500
 
-        return render(request, "index.html", {'routes':routes})
+        return render(request, "index.html", response, status=status)
     else:
         return render(request, "index.html")
 

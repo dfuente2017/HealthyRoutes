@@ -22,37 +22,38 @@ class RoutesProvider():
         routes = list()
 
         response = requests.get('https://graphhopper.com/api/1/route?point=' + str(self.init_lat) + ',' + str(self.init_long) + '&point=' + str(self.end_lat) + ',' + str(self.end_long) + '&vehicle=foot&locale=es&calc_points=true&key=' + self.graphhopper_api_key + '&instructions=true&algorithm=alternative_route&points_encoded=false&ch.disable=true&alternative_route.max_paths=10&alternative_route.max_weight_factor=' + str(self.variation))
-        routes_json = response.json()['paths']
         
-        for route_json in routes_json:
-            route = Route(distance = round(route_json['distance']/1000, 2), time = int(round(route_json['time']/60000,0))) #distancia recibida en metros y convertida a kilometros, y tiempo recibido en milisegundos y convertida a minutos
-            
-            nodes_json = route_json['points']['coordinates']
-            nodes = list()
+        if(response.status_code == 200):
+            routes_json = response.json()['paths']      
+            for route_json in routes_json:
+                route = Route(distance = round(route_json['distance']/1000, 2), time = int(round(route_json['time']/60000,0))) #distancia recibida en metros y convertida a kilometros, y tiempo recibido en milisegundos y convertida a minutos
+                
+                nodes_json = route_json['points']['coordinates']
+                nodes = list()
 
-            for node_json in nodes_json:
-                node = dict()
-                node['longitude'] = node_json[0]
-                node['latitude'] = node_json[1]
-                node['air_quality'] = None
+                for node_json in nodes_json:
+                    node = dict()
+                    node['longitude'] = node_json[0]
+                    node['latitude'] = node_json[1]
+                    node['air_quality'] = None
 
-                nodes.append(node)
+                    nodes.append(node)
 
-            route.nodes = nodes
+                route.nodes = nodes
 
-            instructions_json = route_json['instructions']
-            instructions = list()
+                instructions_json = route_json['instructions']
+                instructions = list()
 
-            for instruction_json in instructions_json:
-                instruction = dict()
-                instruction['distance'] = int(instruction_json['distance'])
-                instruction['text'] = instruction_json['text']
-                instructions.append(instruction)
+                for instruction_json in instructions_json:
+                    instruction = dict()
+                    instruction['distance'] = int(instruction_json['distance'])
+                    instruction['text'] = instruction_json['text']
+                    instructions.append(instruction)
 
-            route.instructions = instructions
+                route.instructions = instructions
 
-            routes.append(route)
-
+                routes.append(route)
+            #endif
         return routes
 
 
