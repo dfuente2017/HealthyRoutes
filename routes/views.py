@@ -72,12 +72,20 @@ def saved_routes(request):
                     response['error_msg'] = str('No se ha incluido el parametro operation correctamente.')
                     status = 400
 
-            elif 'operation' in request.POST and request.POST['operation'] == 'order-by':  #Delete route
-                user = request.POST['user']
-                date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
-                route_db = Route.objects.filter(user = user, date_saved = date_saved)
-                route_db.delete()
-                response['routes'] = Route.objects.filter(user = request.user.email)
+            elif 'operation' in request.POST and request.POST['operation'] == 'delete':  #Delete route
+                if 'user' in request.POST and 'date-saved' in request.POST:
+                    user = request.POST['user']
+                    date_saved = datetime.datetime.strptime(request.POST['date-saved'], '%d-%m-%Y %H:%M:%S.%f %z')
+                    route_db = Route.objects.filter(user = user, date_saved = date_saved)
+                    if(len(list(route_db)) != 0):
+                        route_db.delete()
+                        response['routes'] = Route.objects.filter(user = request.user.email)
+                    else:
+                        response['error_msg'] = str('El usuario recibido no tiene la ruta que se quiere borrar.')
+                        status = 400
+                else:
+                    response['error_msg'] = str('No se han incluido los parametros necesarios.')
+                    status = 400
             else:
                 response['error_msg'] = str('No se ha incluido el parametro operation correctamente.')
                 status = 400

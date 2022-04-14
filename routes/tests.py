@@ -5,6 +5,7 @@ from air_stations.models import AirStation
 from routes.models import Route
 from users.models import User
 from routes.services.GenerateTestingDataFunctions import generate_routes_testing_data
+import datetime
 
 # Create your tests here.
 class RoutesTests(TestCase):
@@ -282,3 +283,107 @@ class RoutesTests(TestCase):
         self.assertEquals(len(response.context['routes']), 6)
         self.assertEquals(response.context['routes'][0].time, 4)
         self.assertEquals(response.context['routes'][5].time, 5)
+
+
+    def test_saved_routes_POST_operation_delete_no_user_param(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+
+        date_saved = datetime.datetime.strptime(str(Route.objects.filter(user = 'testing@testing.com').first().date_saved).replace('+', ' +'),'%Y-%m-%d %H:%M:%S.%f %z')
+        date_saved = date_saved.strftime('%d-%m-%Y %H:%M:%S.%f %z')
+
+        response = self.client.post(self.saved_routes_url,{
+            'operation':'delete',
+            'date-saved':date_saved
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed('saved-routes.html')
+        self.assertEquals(response.context['user'].is_active, True)
+        self.assertEquals('error_msg' in response.context, True)
+        self.assertEquals(Route.objects.all().count(), 7)
+
+
+    def test_saved_routes_POST_operation_delete_no_date_param(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+        
+        response = self.client.post(self.saved_routes_url,{
+            'operation':'delete',
+            'user':'testing@testing.com'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed('saved-routes.html')
+        self.assertEquals(response.context['user'].is_active, True)
+        self.assertEquals('error_msg' in response.context, True)
+        self.assertEquals(Route.objects.all().count(), 7)
+
+
+    def test_saved_routes_POST_operation_delete_incorrect_user_param(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+        
+        date_saved = datetime.datetime.strptime(str(Route.objects.filter(user = 'testing@testing.com').first().date_saved).replace('+', ' +'),'%Y-%m-%d %H:%M:%S.%f %z')
+        date_saved = date_saved.strftime('%d-%m-%Y %H:%M:%S.%f %z')
+
+        response = self.client.post(self.saved_routes_url,{
+            'operation':'delete',
+            'user':'othertestinguser@othertestinguser.com',
+            'date-saved':date_saved
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed('saved-routes.html')
+        self.assertEquals(response.context['user'].is_active, True)
+        self.assertEquals('error_msg' in response.context, True)
+        self.assertEquals(Route.objects.all().count(), 7)
+
+
+
+
+    def test_saved_routes_POST_operation_delete_incorrect_date_param(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+        
+        date_saved = datetime.datetime.strptime(str(Route.objects.filter(user = 'othertestinguser@othertestinguser.com').first().date_saved).replace('+', ' +'),'%Y-%m-%d %H:%M:%S.%f %z')
+        date_saved = date_saved.strftime('%d-%m-%Y %H:%M:%S.%f %z')
+
+        response = self.client.post(self.saved_routes_url,{
+            'operation':'delete',
+            'user':'testing@testing.com',
+            'date-saved':date_saved
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertTemplateUsed('saved-routes.html')
+        self.assertEquals(response.context['user'].is_active, True)
+        self.assertEquals('error_msg' in response.context, True)
+        self.assertEquals(Route.objects.all().count(), 7)
+
+
+    def test_saved_routes_POST_operation_delete(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+
+        date_saved = datetime.datetime.strptime(str(Route.objects.filter(user = 'testing@testing.com').first().date_saved).replace('+', ' +'),'%Y-%m-%d %H:%M:%S.%f %z')
+        date_saved1 = date_saved.strftime('%d-%m-%Y %H:%M:%S.%f %z')
+        date_saved2 = date_saved.strftime('%Y-%m-%d %H:%M:%S.%f%z')
+
+        response = self.client.post(self.saved_routes_url,{
+            'operation':'delete',
+            'user':'testing@testing.com',
+            'date-saved': date_saved1
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('saved-routes.html')
+        self.assertEquals(response.context['user'].is_active, True)
+        self.assertEquals('error_msg' in response.context, False)
+        self.assertEquals(Route.objects.all().count(), 6)
+        self.assertEquals(list(Route.objects.filter(user = 'testing@testing.com', date_saved = date_saved2)), list())
+
+    
+    #api_route
+    def test_api_route_POST_no_user_logged(self):
+        
+        response = self.client.post(self.api_route)
+
+        self.assertEquals(response.status_code, 401)
+        self.assertEquals(response.context['user'].is_active, False)
+        self.assertEquals('error_msg' in response.context, True)
