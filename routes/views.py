@@ -98,6 +98,7 @@ def saved_routes(request):
 
 @api_view(['POST']) # And DELETE (because of the problem that we can pass data to the ajax request)
 def api_route(request):
+    data = dict()
     if request.user.is_authenticated:
         try:
             if request.POST['type'] == 'POST':

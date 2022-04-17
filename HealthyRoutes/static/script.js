@@ -25,7 +25,6 @@ function like(n){
 
 function disableSubmit(idButton){
 	document.getElementById(idButton).disabled = true;
-	//document.getElementById(idButton).styles = ?
 }
 
 function checkPassword(idButton){

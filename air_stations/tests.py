@@ -27,7 +27,7 @@ class AirStationsTests(TestCase):
         response = self.client.get(self.upload_air_stations_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, False)
 
 
@@ -37,7 +37,7 @@ class AirStationsTests(TestCase):
         response = self.client.get(self.upload_air_stations_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, True)
 
 
@@ -55,7 +55,7 @@ class AirStationsTests(TestCase):
         response = self.client.post(self.upload_air_stations_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, False)
 
 
@@ -65,7 +65,7 @@ class AirStationsTests(TestCase):
         response = self.client.post(self.upload_air_stations_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, True)
         self.assertEquals(response.context['user'].is_superuser, False)
     
@@ -94,7 +94,7 @@ class AirStationsTests(TestCase):
         response = self.client.post(self.get_provinces_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, False)
 
 
@@ -104,7 +104,7 @@ class AirStationsTests(TestCase):
         response = self.client.post(self.get_provinces_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, True)
         self.assertEquals(response.context['user'].is_superuser, False)
 
@@ -146,7 +146,7 @@ class AirStationsTests(TestCase):
         response = self.client.post(self.get_towns_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, False)
 
     
@@ -156,7 +156,7 @@ class AirStationsTests(TestCase):
         response = self.client.post(self.get_towns_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'login.html')
         self.assertEquals(response.context['user'].is_active, True)
         self.assertEquals(response.context['user'].is_superuser, False)
 

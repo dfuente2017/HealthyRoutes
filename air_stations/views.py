@@ -27,7 +27,7 @@ def upload_air_stations(request):
             parameters['countries'] = Country.objects.all()
             return render(request, "upload-air-stations.html", parameters)
     else:
-        return render(request, "index.html", status=401)
+        return render(request, "login.html", status=401)
 
 
 #Ajax requests
@@ -44,7 +44,7 @@ def get_provinces(request):
             status = 400
         return JsonResponse(response, status = status)
     else:
-        return render(request, "index.html", status= 401)
+        return render(request, "login.html", status= 401)
 
 def get_towns(request):
     if request.user.is_authenticated and request.user.is_superuser:
@@ -59,7 +59,7 @@ def get_towns(request):
             status = 400
         return JsonResponse(response, status = status)
     else:
-        return render(request, "index.html", status = 401)
+        return render(request, "login.html", status = 401)
 
 
 def convert_list_into_dict(provinces = list()):
