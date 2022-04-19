@@ -84,9 +84,20 @@ class AirStationsTests(TestCase):
         self.assertTemplateUsed('upload-air-stations.html')
         self.assertEquals(response.context['user'].is_active, True)
         self.assertEquals(response.context['user'].is_superuser, True)
+
         self.assertEquals(AirStation.objects.count(), 24)
-        self.assertEquals(AirStation.objects.first().id, 28079004)
+
+        self.assertAlmostEquals(AirStation.objects.first().id, 28079004)
+        self.assertEquals(AirStation.objects.first().name, 'Pza. de EspaÃ±a')
+        self.assertEquals(AirStation.objects.first().latitude, '40.423882300000002488')
+        self.assertEquals(AirStation.objects.first().longitude, '-3.712256700000000187')
+        self.assertEquals(AirStation.objects.first().town_id, 79)
+
         self.assertEquals(AirStation.objects.last().id, 28079060)
+        self.assertEquals(AirStation.objects.last().name, 'Tres Olivos')
+        self.assertEquals(AirStation.objects.last().latitude, '40.500547699999998486')
+        self.assertEquals(AirStation.objects.last().longitude, '-3.689730799999999977')
+        self.assertEquals(AirStation.objects.last().town_id, 79)
 
 
     #get_provinces
