@@ -1,11 +1,11 @@
-from urllib import response
 from django.test import TestCase, Client
 from django.conf import settings
 from air_stations.models import AirStation
-from routes.models import Route
+from routes.models import Route, Node
 from users.models import User
 from routes.services.GenerateTestingDataFunctions import generate_routes_testing_data
 import datetime
+import json
 
 # Create your tests here.
 class RoutesTests(TestCase):
@@ -13,7 +13,7 @@ class RoutesTests(TestCase):
         self.client = Client()
         self.index_url = '/'
         self.saved_routes_url = '/saved-routes/'
-        self.api_route = '/api/route'
+        self.api_route_url = '/api/route'
         
         #User.objects.create_user(email = 'othertestinguser@othertestinguser.com', password = 'Testing12345', nick = 'othertestinguser')
         User.objects.create_user(email = 'testing@testing.com', password = 'Testing12345', nick = 'testing')
@@ -380,10 +380,132 @@ class RoutesTests(TestCase):
 
     
     #api_route
-    def test_api_route_POST_no_user_logged(self):
-        
-        response = self.client.post(self.api_route)
+    def test_api_route_no_user_logged(self):
+        response = self.client.post(self.api_route_url)
 
         self.assertEquals(response.status_code, 401)
-        self.assertEquals(response.context['user'].is_active, False)
-        self.assertEquals('error_msg' in response.context, True)
+        self.assertEquals('error_msg' in json.loads(response.content), True)
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+        self.assertEquals('message' in json.loads(response.content), False)
+        self.assertEquals('route_date_saved' in json.loads(response.content), False)
+
+
+    def test_api_route_no_type_parameter_sent(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+        
+        response = self.client.post(self.api_route_url)
+
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error_msg' in json.loads(response.content), True)
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+        self.assertEquals('message' in json.loads(response.content), False)
+        self.assertEquals('route_date_saved' in json.loads(response.content), False)
+    
+
+    def test_api_route_incorrect_type_parameter_sent(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+        
+        response = self.client.post(self.api_route_url,{
+            'type':'GET'
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error_msg' in json.loads(response.content), True)
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+        self.assertEquals('message' in json.loads(response.content), False)
+        self.assertEquals('route_date_saved' in json.loads(response.content), False)
+
+
+    def test_api_route_POST_any_parameter_not_sent(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+        
+        response = self.client.post(self.api_route_url,{
+            'type':'POST',
+            'distance':1.0,
+            'time':1,
+            'nodes':json.dumps([{'id':1, 'latitude':1.1, 'longitude':1.1, 'air_quality':1}, 
+                                {'id':2, 'latitude':2.2, 'longitude':2.2, 'air_quality':2}]),
+            'veryGoodAirQualityNodes':1,
+            'goodAirQualityNodes':1,
+            'mediocreAirQualityNodes':1,
+            'badAirQualityNodes':1,
+            'veryBadAirQualityNodes':1,
+            'unknownAirQualityNodes':1,
+            #'rankingPuntuation':1.0,
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error_msg' in json.loads(response.content), True)
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+        self.assertEquals('message' in json.loads(response.content), False)
+        self.assertEquals('route_date_saved' in json.loads(response.content), False)
+
+
+    def test_api_POST_correct_saved_route(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+
+        #There are 6 routes created for this user in the setUp with the function generate_routes_testing_data()
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+
+        response = self.client.post(self.api_route_url,{
+            'type':'POST',
+            'distance':1.0,
+            'time':1,
+            'nodes':json.dumps([{'id':1, 'latitude':1.1, 'longitude':1.1, 'air_quality':1}, 
+                                {'id':2, 'latitude':2.2, 'longitude':2.2, 'air_quality':2}]),
+            'veryGoodAirQualityNodes':1,
+            'goodAirQualityNodes':1,
+            'mediocreAirQualityNodes':1,
+            'badAirQualityNodes':1,
+            'veryBadAirQualityNodes':1,
+            'unknownAirQualityNodes':1,
+            'rankingPuntuation':1.0,
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals('error_msg' in json.loads(response.content), False)
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),7)
+        self.assertEquals('message' in json.loads(response.content), True)
+        self.assertEquals('route_date_saved' in json.loads(response.content), True)
+
+
+    def test_api_DELETE_not_date_saved_sent(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+
+        response = self.client.post(self.api_route_url,{
+            'type':'DELETE',
+        })
+
+        self.assertEquals(response.status_code, 400)
+        self.assertEquals('error_msg' in json.loads(response.content), True)
+        self.assertEquals('route_date_saved' in json.loads(response.content), False)
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+        self.assertEquals('message' in json.loads(response.content), False)
+
+
+    def test_api_POST_correct_deleted_route(self):
+        self.client.login(username = 'testing@testing.com', password = 'Testing12345')
+
+        date_saved = str(datetime.datetime.strptime(str(Route.objects.filter(user = 'testing@testing.com')
+                            .first().date_saved)
+                            .replace('+', ' +'),'%Y-%m-%d %H:%M:%S.%f %z'))
+        date_saved = date_saved[:date_saved.index("+")+1].replace(' ', 'T').replace('+','Z')             
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),6)
+
+        response = self.client.post(self.api_route_url,{
+            'type':'DELETE',
+            'routeDateSaved':date_saved
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals('error_msg' in json.loads(response.content), False)
+        self.assertEquals('route_date_saved' in json.loads(response.content), False)
+
+        self.assertEquals(len(Route.objects.filter(user = 'testing@testing.com')),5)
+        self.assertEquals('message' in json.loads(response.content), True)

@@ -105,10 +105,14 @@ def api_route(request):
                 response = api_route_post(request)
             elif request.POST['type'] == 'DELETE':
                 response = api_route_delete(request)
+            else:
+                data['error_msg'] = str('El parametro type tiene un valor incorrecto')
+                response = ApiResponse(status = status.HTTP_400_BAD_REQUEST, data = data)
         except Exception as e:
-            print(str(e))
-            response = ApiResponse(status = status.HTTP_400_BAD_REQUEST)
+            data['error_msg'] = str(e)
+            response = ApiResponse(status = status.HTTP_400_BAD_REQUEST, data = data)
     else:
-        response = ApiResponse(status = status.HTTP_401_UNAUTHORIZED)
+        data['error_msg'] = str('Debes estar autenticado para poder usar la API.')
+        response = ApiResponse(status = status.HTTP_401_UNAUTHORIZED, data = data)
     
     return response
