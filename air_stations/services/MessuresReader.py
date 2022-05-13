@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from ..models import AirStation, Town, MessuresQuality
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class MessuresReaderInterface():

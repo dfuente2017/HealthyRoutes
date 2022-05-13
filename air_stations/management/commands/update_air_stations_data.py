@@ -1,7 +1,6 @@
 from msilib.schema import Error
 from django.core.management.base import BaseCommand, CommandError
 import requests
-from datetime import MINYEAR, datetime
 from ...models import Town
 from zope.datetime import parseDatetimetz
 

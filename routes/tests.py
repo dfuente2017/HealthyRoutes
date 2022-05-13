@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.conf import settings
 from air_stations.models import AirStation
-from routes.models import Route, Node
+from routes.models import Route
 from users.models import User
 from routes.services.GenerateTestingDataFunctions import generate_routes_testing_data
 import datetime
@@ -15,7 +15,6 @@ class RoutesTests(TestCase):
         self.saved_routes_url = '/saved-routes/'
         self.api_route_url = '/api/route'
         
-        #User.objects.create_user(email = 'othertestinguser@othertestinguser.com', password = 'Testing12345', nick = 'othertestinguser')
         User.objects.create_user(email = 'testing@testing.com', password = 'Testing12345', nick = 'testing')
         generate_routes_testing_data()
 
@@ -337,8 +336,6 @@ class RoutesTests(TestCase):
         self.assertEquals(Route.objects.all().count(), 7)
 
 
-
-
     def test_saved_routes_POST_operation_delete_incorrect_date_param(self):
         self.client.login(username = 'testing@testing.com', password = 'Testing12345')
         
@@ -434,7 +431,6 @@ class RoutesTests(TestCase):
             'badAirQualityNodes':1,
             'veryBadAirQualityNodes':1,
             'unknownAirQualityNodes':1,
-            #'rankingPuntuation':1.0,
         })
 
         self.assertEquals(response.status_code, 400)

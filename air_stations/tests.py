@@ -15,7 +15,7 @@ class AirStationsTests(TestCase):
         self.api_get_air_stations_url = '/api/air_stations'
 
         User.objects.create_user(email = 'testing@testing.com', password = 'Testing12345', nick= 'testing')
-        self.su = User.objects.create_superuser(email = 'testingsu@testing.com', password = 'Testing12345', nick = 'testingsu', is_admin = True, is_staff = True, is_superuser = True)
+        User.objects.create_superuser(email = 'testingsu@testing.com', password = 'Testing12345', nick = 'testingsu', is_admin = True, is_staff = True, is_superuser = True)
         Country.objects.create(id = 0, name = 'TestCountry')
         Province.objects.create(id = 28, name = 'TestProvince', country = 0)
         Town.objects.create(id = 79, name = 'TestTown', url = None, province = 28, last_modified = None)
