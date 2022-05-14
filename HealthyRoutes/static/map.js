@@ -22,6 +22,7 @@ function getAirStations(){
         type: 'get',
         data: {
             //town_id: getTown()
+            town_id: 79
         },
         success: function(response) {
             for(let key in response){

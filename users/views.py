@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.models import auth
 from .models import User
 
@@ -8,24 +7,28 @@ import re
 # Create your views here.
 
 def login(request):
-    auth.logout(request)
+    if(request.user.is_authenticated):
+        auth.logout(request)
+
     if request.method == 'POST':
         user = auth.authenticate(email = request.POST['email'], password = request.POST['pwd'])
         if user is not None:
             auth.login(request,user)
             return redirect("/")
         else:
-            return render(request, "login.html",{"message":"Usuario y/o contraseña incorrecto."})
+            return render(request, "login.html",{"message":"Usuario y/o contraseña incorrecto."}, status = 401)
     else:
-        return render(request, "login.html")
+        return render(request, "login.html", status = 200)
 
 
 def register(request):
-    auth.logout(request)
+    if(request.user.is_authenticated):
+        auth.logout(request)
+        
     parameters = dict()
     if request.method == 'POST':
         if not checkPassword(request.POST['pwd1'], request.POST['pwd2']):
-            parameters['message_nick'] = ('Ese nick ya está en uso.')
+            parameters['message_pwd'] = ('La contraseña no cumple los requisitos.')
         if not len(User.objects.filter(email=request.POST['email'])) == 0:
             parameters['message_email'] = ('Ese email ya está en uso.')
         if not len(User.objects.filter(nick=request.POST['nick'])) == 0:
@@ -37,9 +40,9 @@ def register(request):
             auth.login(request,user)
             return redirect("/")
         else:
-            return render(request, "register.html", parameters)
+            return render(request, "register.html", parameters, status = 400)
     else:
-        return render(request, "register.html")
+        return render(request, "register.html", status = 200)
 
 
 def logout(request):
@@ -51,6 +54,7 @@ def profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             parameters = dict()
+            status_code = 200
             user = request.user
 
             if 'delete-img' in request.POST:
@@ -66,24 +70,25 @@ def profile(request):
                 user.user_img = image
 
             if 'pwd1' in request.POST and len(request.POST['pwd1'])!= 0:
-                print(checkPassword(request.POST['pwd1'],request.POST['pwd2']))
                 if checkPassword(request.POST['pwd1'], request.POST['pwd2']):
                     user.set_password(request.POST['pwd1'])
                 else:
                     parameters['message_pwd'] = ('La contraseña no cumple los requisitos.')
+                    status_code = 400
 
             if 'nick' in request.POST:
                 if len(User.objects.filter(nick=request.POST['nick'])) == 0:
                     user.nick = request.POST['nick']
                 else:
                     parameters['message_nick'] = ('El nick "%s" no está disponible.' % request.POST['nick'])
-
+                    status_code = 400
+                    
             user.save()
-            return render(request, "profile.html", parameters)
+            return render(request, "profile.html", parameters, status= status_code)
         else:
             return render(request, "profile.html")
     else:
-        return render(request, "login.html")  
+        return render(request, "login.html", status=401)
 
 
 
