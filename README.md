@@ -12,9 +12,9 @@ This installation manual has been developed for **Windows 10** and **Firefox**, 
 
 2. Install **MongoDB 4.4** on your local machine.
 
-3. Execute the command `pip install -r requirements.txt` on ../HealthyRoutes/HealthyRoutes/.
+3. Execute the command `pip install -r requirements.txt` on .../HealthyRoutes/.
 
-4. Create an **.env** file on ../HealthyRoutes/HealthyRoutes/HealthyRoutes/ directory with the variables **SECRET_KEY** as the Django secret key and **GRAPHHOPPER_API_KEY** as the key for GraphHopper api. There is an example of how to do it on the **.env.example** on the same directory.
+4. Create an **.env** file on .../HealthyRoutes/HealthyRoutes/ directory with the variables **SECRET_KEY** as the Django secret key and **GRAPHHOPPER_API_KEY** as the key for GraphHopper api. There is an example of how to do it on the **.env.example** on the same directory.
 
 5. Execute the `python manage.py migrate` and `python manage.py makemigrations` commands.
 
@@ -35,7 +35,7 @@ MessuresQuality.objects.create(id=3, messure_name='o3_messure', very_good=80, go
 Messupython resQuality.objects.create(id=4, messure_name='so2_messure', very_good=100, good=200, mediocre=350, bad=500, very_bad=1250)
 exit()
 ~~~
-8. For next step run the `python manage.py runserver` command, login as the superuser you created and access to the http://localhost:8000/upload-air-stations url on your browser. Select the country, province and town and upload the air-station-data.csv that is on ../HealthyRoutes/HealthyRoutes/
+8. For next step run the `python manage.py runserver` command, login as the superuser you created and access to the http://localhost:8000/upload-air-stations url on your browser. Select the country, province and town and upload the air-station-data.csv that is on .../HealthyRoutes/
 
 9. Then, stop the server and execute `python manage.py update_air_stations_data 79` for uploading air quality data for Madrid air stations.
 
