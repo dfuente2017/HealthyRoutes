@@ -1,0 +1,48 @@
+<html>
+	<head>	
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'styles.css' %}">
+		<script src="{% static 'script.js' %}"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
+					<div class="row">
+						<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1"> <br/>Iniciar Sesión</a>
+						<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2 non-active"> <br/>Registrarse</a>
+					</div>
+					<div="row">
+						<form id="login" action="/login/" method="POST">
+							{% csrf_token %}
+							<input id="email" name = "email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
+							<div class="input-group w-75 mx-auto mt-5">
+								<input id="pwd" name="pwd" type="password" class="form-control" placeholder="Contraseña">
+								<div class="input-group-append">
+									<button class="btn btn-secondary" type="button" onclick="showPassword('pwd');">Mostrar contraseña</button>
+								</div>
+							</div>
+							{% if message %}
+								<div class="text-center mt-3">
+									<p style="color:red">{{message}}</p>
+								</div>
+							{% endif%}
+							<button id="submit-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3">Iniciar Sesión</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

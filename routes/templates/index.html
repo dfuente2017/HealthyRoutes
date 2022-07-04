@@ -1,0 +1,187 @@
+{% extends "main.html" %}
+
+{% block content %}
+{% load static %}
+
+<form action="" method='POST'>
+{% csrf_token %}
+    <div class = "container-fluid h-75 overflow-fixed">
+        <div class = "row m-3 h-100">
+            <div class="col-sm-2 overflow-auto">
+                <div class = "row">
+                    <div class="card bg-primary text-white col-sm-12 mt-3">
+                        <input id='initLatitude' name='initLatitude' type='value' hidden></input>
+                        <input id='initLongitude' name='initLongitude' type='value' hidden></input>
+                        <input id='endLatitude' name='endLatitude' type='value' hidden></input>
+                        <input id='endLongitude' name='endLongitude' type='value' hidden></input>
+                        <div class = "row mt-3">
+                            <div class="col-sm-12">
+                                <div class = "form-group text-center">
+                                    <button id="remove-markers-button" type="button" class="btn btn-secondary" disabled onclick="removeMarkers();">Eliminar puntos<span class="glyphicon glyphicon-remove"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "row mt-3" id = "routes_variation" hidden>
+                            <div class = "form-group search-forms">
+                                <input id = "variation" type = "text" class = "form-control" placeholder = "Variación de las rutas">
+                            </div>
+                        </div>
+                        <div class = "row mb-4">
+                            <div class="col-sm-12 text-right">
+                                <a href="#" onclick="showRouteVariation();">Variacion de las rutas (km)&nbsp;&nbsp;<i id="routes_variation_button" class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
+                        </div>
+                        <div class = "row">
+                            <div class="col-sm-12">
+                                <div class = "form-group text-right">
+                                    <button id="search-route-button" class="btn btn-secondary" onclick="searchRoutes();" disabled>Buscar rutas</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                {% if routes %}
+                    <div class="row">
+                        <h1>Ranking</h1>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <h1>Info</h1>
+                    </div>
+                {% endif %}
+                <div id = "route-ranking-container" class = "row overflow-auto hide-scrollbar" style="height: 500px;">
+                    <div id="csrfmiddlewaretoken" hidden>{{csrf_token}}</div>
+                    {% for route in routes %}
+                        <div id="card_{{forloop.counter0}}" class = "card bg-primary text-white col-sm-12 mb-3" onclick="selectRoute('{{ forloop.counter0 }}')";>
+                                                       
+                            <div id="route-distance-{{ forloop.counter0 }}" hidden>{{route.distance}}</div>
+                            <div id="route-time-{{ forloop.counter0 }}" hidden>{{route.time}}</div>
+                            <div id="route_nodes_{{ forloop.counter0 }}" hidden>{{route.nodes}}</div>
+                            <div id="route-very-good-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.very_good_air_quality_nodes}}</div>
+                            <div id="route-good-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.good_air_quality_nodes}}</div>
+                            <div id="route-mediocre-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.mediocre_air_quality_nodes}}</div>
+                            <div id="route-bad-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.bad_air_quality_nodes}}</div>
+                            <div id="route-very-bad-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.very_bad_air_quality_nodes}}</div>
+                            <div id="route-unknown-air-quality-nodes-{{ forloop.counter0 }}" hidden>{{route.unknown_air_quality_nodes}}</div>
+                            <div id="route-ranking-puntuation-{{ forloop.counter0 }}" hidden>{{route.ranking_puntuation}}</div>
+                            <div id="route-date-saved-{{ forloop.counter0 }}" hidden></div>
+
+                            <div class="row">
+                                <div class="col-sm-12 text-right mt-2">
+                                    <a href="#" onclick="like('{{ forloop.counter0 }}');"><i id="like-icon-{{ forloop.counter0 }}" class="glyphicon glyphicon-heart-empty"></i></a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>{{route.ranking_puntuation}} puntos</h2>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <h4>{{route.distance}} km</h2>
+                                    </div>
+                                    <div class="row">
+                                        <h4>{{route.time}} mins</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="extended_info_{{ forloop.counter0 }}" hidden>
+                                {% if route.nodes_on_green_areas != None and route.nodes_on_non_green_areas != None %}
+                                    <div class="row mt-3">
+                                        <div class="col-sm-6">
+                                            <h5 class="mr-5">Zonas verdes: {{route.nodes_on_green_areas}}%</h5>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h5>Zonas no verde: {{route.nodes_on_non_green_areas}}%</h5>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if route.very_good_air_quality_nodes != None %}
+                                    <div class="row mt-2">
+                                        <div class="col-sm-12">
+                                            <h5>Estado de la calidad del aire:</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-3">
+                                        <img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}">{{route.very_good_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}">{{route.good_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}">{{route.mediocre_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}">{{route.bad_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}">{{route.very_bad_air_quality_nodes}}%</img>
+                                        <img class="ml-5 pilots" src="{% static 'img/grey-pilot.png' %}">{{route.unknown_air_quality_nodes}}%</img>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class ="row mb-2 mt-2">
+                                <div class="col-sm-12 text-right">
+                                    <a href="#"><i id="info_button_{{ forloop.counter0 }}" class="glyphicon glyphicon-chevron-down"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div id="info_card" class = "card bg-primary text-white col-sm-12 mb-3";>
+                            <div class="row mt-3">
+                                <div class="col-sm-12">
+                                    <h2>Cómo buscar rutas</h2>
+                                    <h5>1. Haga doble click para situar el marcador de incio de la ruta en el mapa.</h5>
+                                    <h5>2. Repita el anterior paso para situar el marcador de fin de la ruta en el mapa.</h5>
+                                    <h5>3. Si desea ajustar alguno de los dos marcadores pinche sobre uno y arrastrelo donde quiera.</h5>
+                                    <h5>4. Si desea borrar los marcadores y ponerlos de nuevo pulse el botón de "Eliminar puntos".</h5>
+                                    <h5>5. Si desea cambiar la variación de las rutas por defecto, abra el desplegable de variación de las rutas e ingrese el valor que usted desee.</h5>
+                                    <h5>6. Finalmente, pulse el botón "Buscar rutas".</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-sm-12">
+                                    <h2>Valores de las estaciones de calidad del aire</h2>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/blue-pilot.png' %}"></img> Muy buena</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/green-pilot.png' %}"></img> Buena</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/yellow-pilot.png' %}"></img> Regular</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/orange-pilot.png' %}"></img> Mala</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/red-pilot.png' %}"></img> Muy mala</p>
+                                    <p><img class="ml-5 pilots" src="{% static 'img/grey-pilot.png' %}"></img> Desconocida</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class = "col-sm-8 mt-3">
+                <div id="map" class="map" style="height: 650px; width: 100%;"></div>
+                <script src="{% static 'map.js' %}"></script>
+            </div>
+            <div class = "col-sm-2 mt-3">
+                <div class = "row">
+                    <div class="card bg-primary text-white col-sm-12 mb-3">
+                        <h1>Indicaciones</h1>
+                    </div>
+                </div>
+                <div id="instructions_container" class = "row overflow-auto hide-scrollbar" style="height: 600px;">
+                    {% for route in routes %}
+                        <div id="instructions_{{forloop.counter0}}" hidden>
+                            {% for instruction in route.instructions %}
+                                <div class="card bg-secondary text-white mt-3">
+                                    <div class="row m-2">
+                                        <!--<div class="col-sm-3 text-center">
+                                            <i class="glyphicon glyphicon-arrow-up"></i>
+                                        </div>-->
+                                        <div class = "col-sm-2">
+                                            <h5>{{forloop.counter}}.</h5>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <h5>{{instruction.text}}</h5>
+                                        </div>
+                                        <div class="col-sm-3 text-right">
+                                            <h5>{{instruction.distance}} m</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

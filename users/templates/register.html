@@ -1,0 +1,65 @@
+<html>
+	<head>	
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'styles.css' %}">
+		<script src="{% static 'script.js' %}"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="card bg-primary text-white col-sm-6 mt-5 mx-auto">
+					<div class="row">
+						<a id="login-tab" href="/login/" class="col-sm-6 text-center pestañas-login-1 non-active"> <br/>Iniciar Sesión</a>
+						<a id="register-tab" href="/register/" class="col-sm-6 text-center pestañas-login-2"> <br/>Registrarse</a>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<form id="register" action="/register/" method="POST">
+								{% csrf_token %}
+								<input id="email" name="email" type="text" class="form-control w-75 mx-auto mt-5"  placeholder="Email">
+								{% if message_email %}
+									<p style="color:red;">{{ message_email }}</p>
+								{% endif %}
+								<input id="nick" name="nick" type="text" class="form-control w-75 mx-auto mt-5" placeholder="Nick">
+								{% if message_nick %}
+									<p style="color:red;">{{ message_nick }}</p>
+								{% endif %}
+								<div class="input-group w-75 mx-auto mt-5">
+									<input id="pwd1" name="pwd1" type="password" class="form-control" placeholder="Contraseña" onchange="checkForm('register-button');">
+									<div class="input-group-append">
+										<button class="btn btn-secondary" type="button" onclick="showPassword('pwd1');">Mostrar contraseña</button>
+									</div>
+								</div>
+								{% if message_pwd %}
+									<p style="color:red;">{{ message_pwd }}</p>
+								{% endif %}
+
+								<div class="input-group w-75 mx-auto mt-5">
+									<input id="pwd2" name="pwd2" type="password" class="form-control" placeholder="Repita la contraseña" onchange="checkForm('register-button');">
+									<div class="input-group-append">
+										<button class="btn btn-secondary" type="button" onclick="showPassword('pwd2');">Mostrar contraseña</button>
+									</div>
+								</div>
+								<p id="pass-dis" hidden style="color:red;">Las contraseñas no coinciden.</p>
+								<p id="pass-range" hidden style="color:red;">La contraseña debe contener una mayuscula, una minuscula y un número.</p>
+								<p id="pass-length" hidden style="color:red;">La contraseña debe tener una longitud de al menos 10 caracteres.</p>
+								<button id="register-button" name = "submit-button" type="submit" class="form-button float-right mt-5 mb-3" disabled>Registrarse</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

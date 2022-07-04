@@ -15,7 +15,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+from users.views import login, register, logout, profile
+from routes.views import index, saved_routes, api_route
+from air_stations.views import upload_air_stations, get_provinces, get_towns, api_get_air_stations
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', login),
+    path('register/',register),
+    path('logout/', logout),
+    path('profile/', profile),
+    path('', index),
+    path('upload-air-stations', upload_air_stations),
+    path('get/provinces', get_provinces),
+    path('get/towns', get_towns),
+    path('api/air_stations', api_get_air_stations),
+    path('api/route', api_route),
+    path('saved-routes/', saved_routes)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
